@@ -80,7 +80,30 @@ tools\patch.bat
 
 ## 4. ビルド（通常運用コマンド）
 
-推奨コマンド（`--no-cef-update` は付けない）:
+### 4.1 実行前チェック（`chromium\src` をクリーン化）
+
+```bat
+cd /d D:\cef_build_env\chromium_git\chromium\src
+git status --short
+```
+
+`git status --short` に出力がある状態で `automate-git.py` を実行すると、
+patch 適用や `gclient_hook.py` で失敗することがあります。
+
+未コミット変更がある場合は、先に退避してから実行します:
+
+```bat
+git stash push -u -m "wip-before-automate-rwsb"
+```
+
+退避した変更を戻す場合:
+
+```bat
+git stash list
+git stash pop
+```
+
+### 4.2 推奨コマンド（`--no-cef-update` は付けない）
 
 ```bat
 cd /d D:\cef_build_env\chromium_git
@@ -113,10 +136,25 @@ python3 automate-git.py ^
  --url=git@github.com:yuta-jsc/cef.git ^
  --branch=7778 ^
  --checkout=origin/rwsb/schema_change ^
+ --force-cef-update ^
  --force-build --x64-build --build-target=cefclient
 ```
 
 再現性を固定したい場合は `--checkout=<コミットSHA>` を指定します。
+
+`patch/patch.cfg` や `patch/patches/*.patch` を更新した直後は、`chromium\src\cef` 側が古いまま残るのを避けるため、
+最初の1回は `--force-cef-update` を付ける運用を推奨します。
+
+### 4.3 パッチ適用エラー時の復旧（`chrome_browser_webui_license` など）
+
+`gclient_hook.py` 実行時に「patch failed to apply」が出た場合、`chromium\src\cef` と
+`D:\cef_build_env\chromium_git\cef` の内容不一致、または `chromium\src` の未退避変更が原因であることが多いです。
+
+次の順で復旧します:
+
+1. `chromium\src` で `git stash push -u` してから再実行
+2. `automate-git.py` に `--force-cef-update` を付けて再実行（推奨）
+3. それでも解消しない場合は `D:\cef_build_env\chromium_git\chromium\src\cef` を削除して再実行
 
 ## 5. 漏れ確認チェック（最低限）
 

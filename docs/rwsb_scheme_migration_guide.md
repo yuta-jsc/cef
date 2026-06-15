@@ -90,7 +90,7 @@ python3 automate-git.py ^
  --depot-tools-dir=D:\cef_build_env\depot_tools ^
  --url=git@github.com:yuta-jsc/cef.git ^
  --branch=7778 ^
- --checkout=<適用したいコミットSHA or ブランチ> ^
+ --checkout=rwsb/schema_change ^
  --force-build --x64-build --build-target=cefclient
 ```
 

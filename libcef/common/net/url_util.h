@@ -18,7 +18,7 @@ GURL MakeGURL(const CefString& url, bool fixup);
 
 // Fix common problems with user-typed text. Among other things, this:
 // - Converts absolute file paths to "file://" URLs.
-// - Normalizes "about:" and "chrome:" to "chrome://" URLs
+// - Normalizes "about:", "chrome:" and "rwsb:" to "rwsb://" URLs
 // Modifies |gurl| if necessary. Returns true if |gurl| is empty or valid.
 bool FixupGURL(GURL& gurl);
 

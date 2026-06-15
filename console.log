@@ -1,0 +1,15 @@
+Level: Error
+Message: Loading the image 'rwsb://resources/images/chrome_logo_dark.svg' violates the following Content Security Policy directive: "img-src chrome://resources chrome://theme chrome://image chrome://favicon2 chrome://app-icon chrome://extension-icon chrome://fileicon blob: data: 'self'". The action has been blocked.
+Source: rwsb://settings/
+Line: 0
+-----------------------
+Level: Error
+Message: Loading the image 'rwsb://resources/images/chrome_logo_dark.svg' violates the following Content Security Policy directive: "img-src chrome://resources chrome://theme chrome://image chrome://favicon2 chrome://app-icon chrome://extension-icon chrome://fileicon blob: data: 'self'". The action has been blocked.
+Source: rwsb://settings/
+Line: 0
+-----------------------
+Level: Error
+Message: Loading the image 'rwsb://resources/images/arrow_right.svg' violates the following Content Security Policy directive: "img-src chrome://resources chrome://theme chrome://image chrome://favicon2 chrome://app-icon chrome://extension-icon chrome://fileicon blob: data: 'self'". The action has been blocked.
+Source: rwsb://settings/
+Line: 0
+-----------------------

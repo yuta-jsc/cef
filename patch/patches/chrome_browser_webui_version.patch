@@ -243,7 +243,7 @@ index 3b689206909bf911f4e1d1ed97285a38af615136..83b41ccdc28138ff6ac314ca46dfd7a2
 -        <div id="copyright">$i18n{copyright}</div>
 +        <div id="copyright">$i18n{copyright}
 +<if expr="enable_cef">
-+        <br/><a href="chrome://license">license</a> | <a href="chrome://credits">credits</a>
++        <br/><a href="rwsb://license">license</a> | <a href="rwsb://credits">credits</a>
 +</if>
 +        </div>
        </div>

@@ -2,12 +2,13 @@ diff --git chrome/browser/browser_about_handler.cc chrome/browser/browser_about_
 index 08949a69415dfa9f836e00929a34330a34546ce2..e417f50fa68e274b80c0d45bdaa45c7b22fd6dcd 100644
 --- chrome/browser/browser_about_handler.cc
 +++ chrome/browser/browser_about_handler.cc
-@@ -25,6 +25,10 @@
+@@ -25,6 +25,11 @@
  
  namespace {
  
 +bool IsChromeIgnoreUrl(const std::string& spec) {
-+  return base::EqualsCaseInsensitiveASCII(spec, "chrome://ignore/");
++  return base::EqualsCaseInsensitiveASCII(spec, "rwsb://ignore/") ||
++         base::EqualsCaseInsensitiveASCII(spec, "chrome://ignore/");
 +}
 +
  bool IsNonNavigationAboutUrl(const GURL& url) {

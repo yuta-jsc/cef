@@ -1,0 +1,462 @@
+diff --git content/browser/webui/url_data_manager_backend.cc content/browser/webui/url_data_manager_backend.cc
+index 155c29dc585a5..fe2b38f7a1ed6 100644
+--- content/browser/webui/url_data_manager_backend.cc
++++ content/browser/webui/url_data_manager_backend.cc
+@@ -60,6 +60,40 @@ const char kURLDataManagerBackendKeyName[] = "url_data_manager_backend";
+ 
+ bool g_disallow_webui_scheme_caching_for_testing = false;
+ 
++constexpr char kLegacyChromeUISchemePrefix[] = "chrome://";
++constexpr char kLegacyChromeUIUntrustedSchemePrefix[] = "chrome-untrusted://";
++
++bool IsLegacyChromeSchemeRewriteEnabled() {
++  return !base::EqualsCaseInsensitiveASCII(kChromeUIScheme, "chrome");
++}
++
++const std::string& GetCanonicalChromeUISchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIScheme) + "://");
++  return *kPrefix;
++}
++
++const std::string& GetCanonicalChromeUIUntrustedSchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIUntrustedScheme) + "://");
++  return *kPrefix;
++}
++
++void RewriteLegacyChromeSchemesIfNeeded(std::string* value) {
++  if (!IsLegacyChromeSchemeRewriteEnabled() ||
++      (value->find(kLegacyChromeUISchemePrefix) == std::string::npos &&
++       value->find(kLegacyChromeUIUntrustedSchemePrefix) ==
++           std::string::npos)) {
++    return;
++  }
++
++  base::ReplaceSubstringsAfterOffset(value, 0, kLegacyChromeUISchemePrefix,
++                                     GetCanonicalChromeUISchemePrefix());
++  base::ReplaceSubstringsAfterOffset(value, 0,
++                                     kLegacyChromeUIUntrustedSchemePrefix,
++                                     GetCanonicalChromeUIUntrustedSchemePrefix());
++}
++
+ std::vector<std::string> GetWebUISchemesSlow() {
+   std::vector<std::string> schemes = {kChromeUIScheme,
+                                       kChromeUIUntrustedScheme};
+@@ -209,6 +243,7 @@ scoped_refptr<net::HttpResponseHeaders> URLDataManagerBackend::GetHeaders(
+           network::mojom::CSPDirectiveName::FrameAncestors));
+     }
+ 
++    RewriteLegacyChromeSchemesIfNeeded(&csp_header);
+     headers->SetHeader(kChromeURLContentSecurityPolicyHeaderName, csp_header);
+   }
+ 
+diff --git content/browser/webui/web_ui_data_source_impl.cc content/browser/webui/web_ui_data_source_impl.cc
+index 42955f79fe8f6..03ff129b8c6ba 100644
+--- content/browser/webui/web_ui_data_source_impl.cc
++++ content/browser/webui/web_ui_data_source_impl.cc
+@@ -19,7 +19,9 @@
+ #include "base/functional/callback.h"
+ #include "base/memory/raw_ptr.h"
+ #include "base/memory/ref_counted_memory.h"
++#include "base/no_destructor.h"
+ #include "base/strings/string_util.h"
++#include "base/strings/string_view_util.h"
+ #include "base/strings/utf_string_conversions.h"
+ #include "base/task/thread_pool.h"
+ #include "base/trace_event/trace_event.h"
+@@ -133,6 +135,74 @@ void GetDataResourceBytesOnWorkerThreadFromDisk(
+ }
+ #endif  // BUILDFLAG(LOAD_WEBUI_FROM_DISK)
+ 
++constexpr char kLegacyChromeUISchemePrefix[] = "chrome://";
++constexpr char kLegacyChromeUIUntrustedSchemePrefix[] = "chrome-untrusted://";
++
++bool IsLegacyChromeSchemeRewriteEnabled() {
++  return !base::EqualsCaseInsensitiveASCII(kChromeUIScheme, "chrome");
++}
++
++const std::string& GetCanonicalChromeUISchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIScheme) + "://");
++  return *kPrefix;
++}
++
++const std::string& GetCanonicalChromeUIUntrustedSchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIUntrustedScheme) + "://");
++  return *kPrefix;
++}
++
++bool IsTextMimeTypeForLegacyChromeSchemeRewrite(std::string_view mime_type) {
++  return mime_type == "text/html" || mime_type == "text/css" ||
++         mime_type == "application/javascript" ||
++         mime_type == "application/typescript" ||
++         mime_type == "application/json" || mime_type == "image/svg+xml";
++}
++
++std::string RewriteLegacyChromeSchemeIfNeeded(std::string value) {
++  if (!IsLegacyChromeSchemeRewriteEnabled() ||
++      (value.find(kLegacyChromeUISchemePrefix) == std::string::npos &&
++       value.find(kLegacyChromeUIUntrustedSchemePrefix) == std::string::npos)) {
++    return value;
++  }
++
++  base::ReplaceSubstringsAfterOffset(&value, 0, kLegacyChromeUISchemePrefix,
++                                     GetCanonicalChromeUISchemePrefix());
++  base::ReplaceSubstringsAfterOffset(&value, 0,
++                                     kLegacyChromeUIUntrustedSchemePrefix,
++                                     GetCanonicalChromeUIUntrustedSchemePrefix());
++  return value;
++}
++
++void RewriteLegacyChromeSchemeAndReply(
++    URLDataSource::GotDataCallback callback,
++    scoped_refptr<base::RefCountedMemory> bytes) {
++  if (!bytes) {
++    std::move(callback).Run(nullptr);
++    return;
++  }
++
++  std::string_view content = base::as_string_view(*bytes);
++  if ((content.find(kLegacyChromeUISchemePrefix) == std::string_view::npos &&
++       content.find(kLegacyChromeUIUntrustedSchemePrefix) ==
++           std::string_view::npos) ||
++      !IsLegacyChromeSchemeRewriteEnabled()) {
++    std::move(callback).Run(std::move(bytes));
++    return;
++  }
++
++  std::string rewritten(content);
++  base::ReplaceSubstringsAfterOffset(&rewritten, 0, kLegacyChromeUISchemePrefix,
++                                     GetCanonicalChromeUISchemePrefix());
++  base::ReplaceSubstringsAfterOffset(&rewritten, 0,
++                                     kLegacyChromeUIUntrustedSchemePrefix,
++                                     GetCanonicalChromeUIUntrustedSchemePrefix());
++  std::move(callback).Run(
++      base::MakeRefCounted<base::RefCountedString>(std::move(rewritten)));
++}
++
+ }  // namespace
+ 
+ // Internal class to hide the fact that WebUIDataSourceImpl implements
+@@ -156,9 +226,10 @@ class WebUIDataSourceImpl::InternalDataSource : public URLDataSource {
+   bool AllowCaching() override { return false; }
+   std::string GetContentSecurityPolicy(
+       network::mojom::CSPDirectiveName directive) override {
++    std::string csp_value;
+     if (auto it = parent_->csp_overrides_.find(directive);
+         it != parent_->csp_overrides_.end()) {
+-      return it->second;
++      csp_value = it->second;
+     } else if (directive == network::mojom::CSPDirectiveName::FrameAncestors) {
+       std::string frame_ancestors;
+       if (parent_->frame_ancestors_.size() == 0)
+@@ -166,10 +237,12 @@ class WebUIDataSourceImpl::InternalDataSource : public URLDataSource {
+       for (const GURL& frame_ancestor : parent_->frame_ancestors_) {
+         frame_ancestors += " " + frame_ancestor.spec();
+       }
+-      return "frame-ancestors" + frame_ancestors + ";";
++      csp_value = "frame-ancestors" + frame_ancestors + ";";
++    } else {
++      csp_value = URLDataSource::GetContentSecurityPolicy(directive);
+     }
+ 
+-    return URLDataSource::GetContentSecurityPolicy(directive);
++    return RewriteLegacyChromeSchemeIfNeeded(std::move(csp_value));
+   }
+   std::string GetCrossOriginOpenerPolicy() override {
+     return parent_->coop_value_;
+@@ -496,19 +569,25 @@ void WebUIDataSourceImpl::StartDataRequest(
+     return;
+   }
+ 
++  URLDataSource::GotDataCallback wrapped_callback = std::move(callback);
++  if (IsTextMimeTypeForLegacyChromeSchemeRewrite(GetMimeType(url))) {
++    wrapped_callback = base::BindOnce(&RewriteLegacyChromeSchemeAndReply,
++                                      std::move(wrapped_callback));
++  }
++
+   EnsureLoadTimeDataDefaultsAdded();
+ 
+   if (use_strings_js_) {
+     bool from_js_module = path == "strings.m.js";
+     if (from_js_module || path == "strings.js") {
+-      SendLocalizedStringsAsJSON(std::move(callback), from_js_module);
++      SendLocalizedStringsAsJSON(std::move(wrapped_callback), from_js_module);
+       return;
+     }
+   }
+ 
+   int resource_id = URLToIdrOrDefault(url);
+   if (resource_id == kNonExistentResource) {
+-    std::move(callback).Run(nullptr);
++    std::move(wrapped_callback).Run(nullptr);
+     return;
+   }
+ 
+@@ -517,14 +596,14 @@ void WebUIDataSourceImpl::StartDataRequest(
+     auto it = idr_to_file_map_.find(resource_id);
+     if (it != idr_to_file_map_.end()) {
+       GetDataResourceBytesOnWorkerThreadFromDisk(it->second,
+-                                                 std::move(callback));
++                                                 std::move(wrapped_callback));
+       return;
+     }
+     // Fall back to reading from the .pak file.
+   }
+ #endif  // BUILDFLAG(LOAD_WEBUI_FROM_DISK)
+ 
+-  GetDataResourceBytesOnWorkerThread(resource_id, std::move(callback));
++  GetDataResourceBytesOnWorkerThread(resource_id, std::move(wrapped_callback));
+ }
+ 
+ void WebUIDataSourceImpl::SendLocalizedStringsAsJSON(
+diff --git content/browser/webui/web_ui_data_source_unittest.cc content/browser/webui/web_ui_data_source_unittest.cc
+index cde691c4f05b5..43d2fee178efd 100644
+--- content/browser/webui/web_ui_data_source_unittest.cc
++++ content/browser/webui/web_ui_data_source_unittest.cc
+@@ -9,6 +9,7 @@
+ #include "base/strings/utf_string_conversions.h"
+ #include "content/browser/webui/web_ui_data_source_impl.h"
+ #include "content/public/common/buildflags.h"
++#include "content/public/common/url_constants.h"
+ #include "content/public/test/browser_task_environment.h"
+ #include "content/public/test/test_content_client.h"
+ #include "services/network/public/mojom/content_security_policy.mojom.h"
+@@ -330,6 +331,8 @@ TEST_F(WebUIDataSourceTest, NoSetDefaultResource) {
+ 
+ TEST_F(WebUIDataSourceTest, SetCspValues) {
+   URLDataSource* url_data_source = source()->source();
++  const std::string webui_resources =
++      std::string(kChromeUIScheme) + "://resources";
+ 
+   // Default values.
+   EXPECT_EQ("child-src 'none';",
+@@ -348,7 +351,7 @@ TEST_F(WebUIDataSourceTest, SetCspValues) {
+   EXPECT_EQ("object-src 'none';",
+             url_data_source->GetContentSecurityPolicy(
+                 network::mojom::CSPDirectiveName::ObjectSrc));
+-  EXPECT_EQ("script-src chrome://resources 'self';",
++  EXPECT_EQ("script-src " + webui_resources + " 'self';",
+             url_data_source->GetContentSecurityPolicy(
+                 network::mojom::CSPDirectiveName::ScriptSrc));
+   EXPECT_EQ("", url_data_source->GetContentSecurityPolicy(
+@@ -407,7 +410,7 @@ TEST_F(WebUIDataSourceTest, SetCspValues) {
+   source()->OverrideContentSecurityPolicy(
+       network::mojom::CSPDirectiveName::ScriptSrc,
+       "script-src chrome://resources 'self' 'unsafe-inline';");
+-  EXPECT_EQ("script-src chrome://resources 'self' 'unsafe-inline';",
++  EXPECT_EQ("script-src " + webui_resources + " 'self' 'unsafe-inline';",
+             url_data_source->GetContentSecurityPolicy(
+                 network::mojom::CSPDirectiveName::ScriptSrc));
+ 
+@@ -463,10 +466,13 @@ TEST_F(WebUIDataSourceTest, SetCrossOriginPolicyValues) {
+ 
+ TEST_F(WebUIDataSourceTest, GetOrigin) {
+   CreateDataSource("host");
+-  EXPECT_EQ(source()->GetOrigin(), url::Origin::Create(GURL("chrome://host")));
+-  CreateDataSource("chrome-untrusted://host/");
+   EXPECT_EQ(source()->GetOrigin(),
+-            url::Origin::Create(GURL("chrome-untrusted://host")));
++            url::Origin::Create(
++                GURL(std::string(kChromeUIScheme) + "://host")));
++  CreateDataSource(std::string(kChromeUIUntrustedScheme) + "://host/");
++  EXPECT_EQ(source()->GetOrigin(),
++            url::Origin::Create(
++                GURL(std::string(kChromeUIUntrustedScheme) + "://host")));
+ }
+ 
+ #if BUILDFLAG(LOAD_WEBUI_FROM_DISK)
+diff --git content/browser/webui/web_ui_url_loader_factory.cc content/browser/webui/web_ui_url_loader_factory.cc
+index 24c7bec96ca0a..81a9f5b97d876 100644
+--- content/browser/webui/web_ui_url_loader_factory.cc
++++ content/browser/webui/web_ui_url_loader_factory.cc
+@@ -16,7 +16,9 @@
+ #include "base/logging.h"
+ #include "base/memory/ref_counted_memory.h"
+ #include "base/metrics/histogram_macros.h"
++#include "base/no_destructor.h"
+ #include "base/numerics/safe_conversions.h"
++#include "base/strings/string_util.h"
+ #include "base/strings/string_view_util.h"
+ #include "base/task/single_thread_task_runner.h"
+ #include "base/task/thread_pool.h"
+@@ -54,6 +56,48 @@ namespace {
+ 
+ class WebUIURLLoaderFactory;
+ 
++constexpr char kLegacyChromeUISchemePrefix[] = "chrome://";
++constexpr char kLegacyChromeUIUntrustedSchemePrefix[] = "chrome-untrusted://";
++
++bool IsLegacyChromeSchemeRewriteEnabled() {
++  return !base::EqualsCaseInsensitiveASCII(kChromeUIScheme, "chrome");
++}
++
++const std::string& GetCanonicalChromeUISchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIScheme) + "://");
++  return *kPrefix;
++}
++
++const std::string& GetCanonicalChromeUIUntrustedSchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIUntrustedScheme) + "://");
++  return *kPrefix;
++}
++
++bool IsTextMimeTypeForLegacyChromeSchemeRewrite(std::string_view mime_type) {
++  return mime_type == "text/html" || mime_type == "text/css" ||
++         mime_type == "text/javascript" ||
++         mime_type == "application/javascript" ||
++         mime_type == "application/typescript" ||
++         mime_type == "application/json" || mime_type == "image/svg+xml";
++}
++
++void RewriteLegacyChromeSchemesIfNeeded(std::string* value) {
++  if (!IsLegacyChromeSchemeRewriteEnabled() ||
++      (value->find(kLegacyChromeUISchemePrefix) == std::string::npos &&
++       value->find(kLegacyChromeUIUntrustedSchemePrefix) ==
++           std::string::npos)) {
++    return;
++  }
++
++  base::ReplaceSubstringsAfterOffset(value, 0, kLegacyChromeUISchemePrefix,
++                                     GetCanonicalChromeUISchemePrefix());
++  base::ReplaceSubstringsAfterOffset(value, 0,
++                                     kLegacyChromeUIUntrustedSchemePrefix,
++                                     GetCanonicalChromeUIUntrustedSchemePrefix());
++}
++
+ void ReadData(
+     network::mojom::URLResponseHeadPtr headers,
+     const ui::TemplateReplacements* replacements,
+@@ -83,6 +127,20 @@ void ReadData(
+     bytes = base::MakeRefCounted<base::RefCountedString>(std::move(temp_str));
+   }
+ 
++  if (IsTextMimeTypeForLegacyChromeSchemeRewrite(headers->mime_type) &&
++      IsLegacyChromeSchemeRewriteEnabled()) {
++    std::string_view response_body = base::as_string_view(*bytes);
++    if (response_body.find(kLegacyChromeUISchemePrefix) !=
++            std::string_view::npos ||
++        response_body.find(kLegacyChromeUIUntrustedSchemePrefix) !=
++            std::string_view::npos) {
++      std::string rewritten_response(response_body);
++      RewriteLegacyChromeSchemesIfNeeded(&rewritten_response);
++      bytes = base::MakeRefCounted<base::RefCountedString>(
++          std::move(rewritten_response));
++    }
++  }
++
+   // Send the bytes to the client. Failed requests do not count towards load
+   // time metrics.
+   if (!webui::SendData(std::move(headers), std::move(client_remote),
+diff --git content/renderer/local_resource_url_loader_factory.cc content/renderer/local_resource_url_loader_factory.cc
+index 4730d0f883dd3..342b4f4dc33f9 100644
+--- content/renderer/local_resource_url_loader_factory.cc
++++ content/renderer/local_resource_url_loader_factory.cc
+@@ -11,7 +11,9 @@
+ #include "base/check.h"
+ #include "base/containers/span.h"
+ #include "base/memory/ref_counted_memory.h"
++#include "base/no_destructor.h"
+ #include "base/memory/scoped_refptr.h"
++#include "base/strings/string_util.h"
+ #include "base/strings/string_view_util.h"
+ #include "base/task/sequenced_task_runner.h"
+ #include "base/task/task_traits.h"
+@@ -68,6 +70,50 @@ std::string GetMimeType(const GURL& url) {
+   return "text/html";
+ }
+ 
++constexpr char kLegacyChromeUISchemePrefix[] = "chrome://";
++constexpr char kLegacyChromeUIUntrustedSchemePrefix[] = "chrome-untrusted://";
++
++bool IsLegacyChromeSchemeRewriteEnabled() {
++  return !base::EqualsCaseInsensitiveASCII(kChromeUIScheme, "chrome");
++}
++
++const std::string& GetCanonicalChromeUISchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIScheme) + "://");
++  return *kPrefix;
++}
++
++const std::string& GetCanonicalChromeUIUntrustedSchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(kChromeUIUntrustedScheme) + "://");
++  return *kPrefix;
++}
++
++bool IsTextMimeTypeForLegacyChromeSchemeRewrite(std::string_view mime_type) {
++  return mime_type == "text/html" || mime_type == "text/css" ||
++         mime_type == "text/javascript" ||
++         mime_type == "application/javascript" ||
++         mime_type == "application/typescript" ||
++         mime_type == "application/json" || mime_type == "image/svg+xml";
++}
++
++void RewriteLegacyChromeSchemeForMimeType(std::string_view mime_type,
++                                          std::string* content) {
++  if (!IsLegacyChromeSchemeRewriteEnabled() ||
++      !IsTextMimeTypeForLegacyChromeSchemeRewrite(mime_type) ||
++      (content->find(kLegacyChromeUISchemePrefix) == std::string::npos &&
++       content->find(kLegacyChromeUIUntrustedSchemePrefix) ==
++           std::string::npos)) {
++    return;
++  }
++
++  base::ReplaceSubstringsAfterOffset(content, 0, kLegacyChromeUISchemePrefix,
++                                     GetCanonicalChromeUISchemePrefix());
++  base::ReplaceSubstringsAfterOffset(content, 0,
++                                     kLegacyChromeUIUntrustedSchemePrefix,
++                                     GetCanonicalChromeUIUntrustedSchemePrefix());
++}
++
+ // Returns the content of the response for `path` in `source` if found.
+ // Note: This only searches for `response_body`, not `resource_id`.
+ std::optional<std::string_view> FindResponseInSource(
+@@ -122,8 +168,10 @@ void SendResponse(mojo::PendingRemote<network::mojom::URLLoaderClient> client,
+   url_response_head->load_timing.request_start_time = now_time;
+   url_response_head->load_timing.request_start = now_ticks;
+ 
++  std::string response_body(content);
++  RewriteLegacyChromeSchemeForMimeType(mime_type, &response_body);
+   scoped_refptr<base::RefCountedString> bytes =
+-      base::MakeRefCounted<base::RefCountedString>(std::string(content));
++      base::MakeRefCounted<base::RefCountedString>(std::move(response_body));
+ 
+   webui::SendData(std::move(url_response_head), std::move(client), std::nullopt,
+                   bytes);
+@@ -213,7 +261,7 @@ void LocalResourceURLLoaderFactory::CreateLoaderAndStart(
+                                     traffic_annotation);
+     return;
+   }
+-  // Only the "chrome" scheme is supported.
++  // Only the canonical WebUI scheme is supported.
+   CHECK(request.url.GetScheme() == kChromeUIScheme);
+   // Parallelize calls to GetResourceAndRespond across multiple threads.
+   // Needs to be posted to a SequencedTaskRunner as Mojo requires a
+@@ -344,6 +392,21 @@ LocalResourceURLLoaderFactory::GetResource(
+         std::move(replaced_string));
+   }
+ 
++  if (IsTextMimeTypeForLegacyChromeSchemeRewrite(mime_type) &&
++      IsLegacyChromeSchemeRewriteEnabled()) {
++    std::string_view current_bytes =
++        base::as_string_view(*bytes_after_replacement);
++    if (current_bytes.find(kLegacyChromeUISchemePrefix) !=
++            std::string_view::npos ||
++        current_bytes.find(kLegacyChromeUIUntrustedSchemePrefix) !=
++            std::string_view::npos) {
++      std::string rewritten(current_bytes);
++      RewriteLegacyChromeSchemeForMimeType(mime_type, &rewritten);
++      bytes_after_replacement = base::MakeRefCounted<base::RefCountedString>(
++          std::move(rewritten));
++    }
++  }
++
+   return bytes_after_replacement;
+ }
+ 

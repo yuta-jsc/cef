@@ -459,4 +459,70 @@ index 4730d0f883dd3..342b4f4dc33f9 100644
 +
    return bytes_after_replacement;
  }
+
+ diff --git extensions/common/features/simple_feature.cc extensions/common/features/simple_feature.cc
+ index 7333581b40cdc..63c91cbb75a59 100644
+ --- extensions/common/features/simple_feature.cc
+ +++ extensions/common/features/simple_feature.cc
+ @@ -19,6 +19,7 @@
+  #include "base/strings/string_split.h"
+  #include "base/strings/string_util.h"
+  #include "base/strings/stringprintf.h"
+ +#include "content/public/common/url_constants.h"
+  #include "components/crx_file/id_util.h"
+  #include "extensions/common/extension_api.h"
+  #include "extensions/common/extension_features.h"
+ @@ -61,6 +62,26 @@ AllowlistInfo& GetAllowlistInfo() {
+    return *instance;
+  }
  
+ +std::string NormalizeLegacyWebUISchemePattern(std::string_view pattern) {
+ +  constexpr std::string_view kLegacyChromeSchemePrefix = "chrome://";
+ +  constexpr std::string_view kLegacyChromeUntrustedSchemePrefix =
+ +      "chrome-untrusted://";
+ +
+ +  if (base::StartsWith(pattern, kLegacyChromeSchemePrefix)) {
+ +    return base::StrCat(
+ +        {content::kChromeUIScheme, "://",
+ +         pattern.substr(kLegacyChromeSchemePrefix.size())});
+ +  }
+ +
+ +  if (base::StartsWith(pattern, kLegacyChromeUntrustedSchemePrefix)) {
+ +    return base::StrCat(
+ +        {content::kChromeUIUntrustedScheme, "://",
+ +         pattern.substr(kLegacyChromeUntrustedSchemePrefix.size())});
+ +  }
+ +
+ +  return std::string(pattern);
+ +}
+ +
+  Feature::Availability IsAvailableToManifestForBind(
+      const HashedExtensionId& hashed_id,
+      Manifest::Type type,
+ @@ -612,8 +633,24 @@ void SimpleFeature::set_session_types(
+  void SimpleFeature::set_matches(
+      std::initializer_list<const char* const> matches) {
+    matches_.ClearPatterns();
+ -  for (const auto* pattern : matches)
+ -    matches_.AddPattern(URLPattern(URLPattern::SCHEME_ALL, pattern));
+ +  for (const auto* pattern : matches) {
+ +    URLPattern url_pattern(URLPattern::SCHEME_ALL);
+ +    auto parse_result = url_pattern.Parse(pattern);
+ +    if (parse_result != URLPattern::ParseResult::kSuccess) {
+ +      const std::string normalized_pattern =
+ +          NormalizeLegacyWebUISchemePattern(pattern);
+ +      if (normalized_pattern != pattern) {
+ +        parse_result = url_pattern.Parse(normalized_pattern);
+ +      }
+ +    }
+ +
+ +    DCHECK_EQ(URLPattern::ParseResult::kSuccess, parse_result)
+ +        << "Parsing unexpectedly failed for pattern: " << pattern << ": "
+ +        << URLPattern::GetParseResultString(parse_result);
+ +    if (parse_result == URLPattern::ParseResult::kSuccess) {
+ +      matches_.AddPattern(url_pattern);
+ +    }
+ +  }
+  }
+ 
+  void SimpleFeature::set_platforms(std::initializer_list<Platform> platforms) {

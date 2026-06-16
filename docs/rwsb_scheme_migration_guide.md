@@ -156,6 +156,10 @@ python3 automate-git.py ^
 2. `automate-git.py` に `--force-cef-update` を付けて再実行（推奨）
 3. それでも解消しない場合は `D:\cef_build_env\chromium_git\chromium\src\cef` を削除して再実行
 
+`[FATAL:extensions\\common\\url_pattern.cc:175] ... simple_feature.cc:616`
+で落ちる場合は、`chrome_ui_scheme_runtime_compat.patch` を最新版に同期して再ビルドしてください。
+暫定回避として `cefclient` 起動時に `--disable-extensions` を付けると起動確認を進められます。
+
 ## 5. 漏れ確認チェック（最低限）
 
 `cefclient` は URL を **位置引数ではなく `--url=`** で渡す:
@@ -163,10 +167,30 @@ python3 automate-git.py ^
 ```bat
 set OUT=D:\cef_build_env\chromium_git\chromium\src\out\Release_GN_x64
 
-%OUT%\cefclient.exe --url=rwsb://settings/ --user-data-dir=%OUT%\tmp_profile_rwsb_settings
-%OUT%\cefclient.exe --url=rwsb://version/ --user-data-dir=%OUT%\tmp_profile_rwsb_version
-%OUT%\cefclient.exe --url=rwsb://downloads/ --user-data-dir=%OUT%\tmp_profile_rwsb_downloads
-%OUT%\cefclient.exe --url=chrome://version/ --user-data-dir=%OUT%\tmp_profile_legacy_version
+%OUT%\cefclient.exe --url=rwsb://settings/ --user-data-dir=%OUT%\tmp_profile_rwsb_settings --cache-path=%OUT%\tmp_profile_rwsb_settings\cache
+%OUT%\cefclient.exe --url=rwsb://version/ --user-data-dir=%OUT%\tmp_profile_rwsb_version --cache-path=%OUT%\tmp_profile_rwsb_version\cache
+%OUT%\cefclient.exe --url=rwsb://downloads/ --user-data-dir=%OUT%\tmp_profile_rwsb_downloads --cache-path=%OUT%\tmp_profile_rwsb_downloads\cache
+%OUT%\cefclient.exe --url=chrome://version/ --user-data-dir=%OUT%\tmp_profile_legacy_version --cache-path=%OUT%\tmp_profile_legacy_version\cache
+```
+
+`--user-data-dir` と `--cache-path` をセットで指定して、プロファイルと process singleton 判定を明示的に固定します。
+
+### 5.1 起動しない場合（ウィンドウが出ない場合）
+
+`[WARNING] ... root_cache_path ... process singleton behavior` が出てコマンドだけ返る場合は、
+既存プロセス再利用やプロファイル状態でウィンドウが見えないケースが多いです。
+
+```bat
+set OUT=D:\cef_build_env\chromium_git\chromium\src\out\Release_GN_x64
+
+powershell -NoProfile -Command "Get-Process cefclient -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.Id -Force }"
+rmdir /s /q %OUT%\tmp_profile_rwsb
+
+%OUT%\cefclient.exe --url=rwsb://settings/ ^
+ --user-data-dir=%OUT%\tmp_profile_rwsb ^
+ --cache-path=%OUT%\tmp_profile_rwsb\cache ^
+ --initial-show-state=normal ^
+ --enable-logging=stderr --v=1
 ```
 
 確認ポイント:

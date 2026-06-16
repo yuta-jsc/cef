@@ -221,3 +221,33 @@ cherry-pick -> patch_updater.bat --resave（対象patch）-> tools\patch.bat -> 
 ```
 
 `A` がリモート未pushの場合は、`--checkout=A` を使ってください。
+
+## 8. 今後の追加改修を増やす場合の運用
+
+複数テーマを並行する場合は、**1テーマ1ブランチ**で管理します。
+
+### 8.1 修正テーマとブランチの管理表（この形式で追記）
+
+```text
+スキーマ変更: rwsb/schema_change
+○○〇: rwsb/〇〇〇
+```
+
+新しい修正を始めるたびに、上記の管理表へ `修正内容: ブランチ名` を1行追加してください。
+
+### 8.2 実運用ルール
+
+1. `cef.git` で修正テーマごとにブランチを作る（例: `rwsb/feature_x`）。
+2. `chromium/src` 側に触れる変更は patch 化し、`patch.cfg` に登録する。
+3. `cef` 配下だけで完結する変更は通常コミットで管理する。
+4. 各ブランチで `automate-git.py --checkout=origin/<branch> --force-cef-update` を実行して反映確認する。
+5. 別ブランチへ持っていくときは `cherry-pick` + `patch_updater --resave` + `tools\patch.bat` の順で適用する。
+
+### 8.3 Copilot 依頼テンプレ（新規テーマ用）
+
+```text
+cef.git の新規修正「○○〇」を rwsb/〇〇〇 で進めて。
+docs/rwsb_scheme_migration_guide.md に従って、
+必要な patch 追加/更新、patch.cfg 更新、automate-git.py での反映確認まで実施して。
+失敗が出たら修正して再実行し、最後に変更ファイル一覧だけ報告して。commit/push は私が指示するまでしない。
+```

@@ -113,7 +113,8 @@ python3 automate-git.py ^
  --depot-tools-dir=D:\cef_build_env\depot_tools ^
  --url=git@github.com:yuta-jsc/cef.git ^
  --branch=7778 ^
- --checkout=rwsb/schema_change ^
+ --checkout=origin/rwsb/schema_change ^
+ --force-cef-update ^
  --force-build --x64-build --build-target=cefclient
 ```
 
@@ -156,9 +157,10 @@ python3 automate-git.py ^
 2. `automate-git.py` に `--force-cef-update` を付けて再実行（推奨）
 3. それでも解消しない場合は `D:\cef_build_env\chromium_git\chromium\src\cef` を削除して再実行
 
-`[FATAL:extensions\\common\\url_pattern.cc:175] ... simple_feature.cc:616`
-で落ちる場合は、`chrome_ui_scheme_runtime_compat.patch` を最新版に同期して再ビルドしてください。
-暫定回避として `cefclient` 起動時に `--disable-extensions` を付けると起動確認を進められます。
+`[FATAL:extensions\common\url_pattern.cc:175] ... simple_feature.cc:616`
+（`chrome://bluetooth-pairing/*` などで `Wrong scheme type`）が出る場合は、
+`chrome_ui_scheme_runtime_compat.patch` を最新版へ同期して再ビルドしてください。
+一時的な動作確認は `cefclient` に `--disable-extensions` を付けると回避できます。
 
 ## 5. 漏れ確認チェック（最低限）
 
@@ -173,16 +175,15 @@ set OUT=D:\cef_build_env\chromium_git\chromium\src\out\Release_GN_x64
 %OUT%\cefclient.exe --url=chrome://version/ --user-data-dir=%OUT%\tmp_profile_legacy_version --cache-path=%OUT%\tmp_profile_legacy_version\cache
 ```
 
-`--user-data-dir` と `--cache-path` をセットで指定して、プロファイルと process singleton 判定を明示的に固定します。
+`%OUT%` は **cmd.exe の変数**です。PowerShell で実行する場合は `$env:OUT` を使ってください。
 
-### 5.1 起動しない場合（ウィンドウが出ない場合）
+### 5.1 起動しない場合（プロセスだけ残る場合）
 
-`[WARNING] ... root_cache_path ... process singleton behavior` が出てコマンドだけ返る場合は、
-既存プロセス再利用やプロファイル状態でウィンドウが見えないケースが多いです。
+`root_cache_path` 警告が出てウィンドウが出ない場合は、既存プロセス再利用や
+`--cache-path` 不備が原因であることが多いです。
 
 ```bat
 set OUT=D:\cef_build_env\chromium_git\chromium\src\out\Release_GN_x64
-
 powershell -NoProfile -Command "Get-Process cefclient -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.Id -Force }"
 rmdir /s /q %OUT%\tmp_profile_rwsb
 
@@ -207,3 +208,16 @@ rmdir /s /q %OUT%\tmp_profile_rwsb
 2. **実行時互換層**: 残存する `chrome://` / `chrome-untrusted://` を配信時に `rwsb://` / `rwsb-untrusted://` へ変換
 
 このため、将来アップデート時は「パッチ再適用 + `patch_updater --resave`」で追従しやすい構成です。
+
+## 7. Copilot への指示テンプレート（別ブランチ移植）
+
+`A` を対象ブランチ名に置き換えて、そのまま貼り付けて使えます。
+
+```text
+cef.git の新しいブランチ A に rwsb スキーマ変更を移植して。
+docs/rwsb_scheme_migration_guide.md に従って、
+cherry-pick -> patch_updater.bat --resave（対象patch）-> tools\patch.bat -> automate-git.py（--branch=7778 --checkout=origin/A --force-cef-update --force-build --x64-build --build-target=cefclient）-> cefclient動作確認（settings/version/downloads と chrome://version）まで実施して。
+失敗が出たら修正して再実行し、最後に変更ファイル一覧だけ報告して。commit/push は私が指示するまでしない。
+```
+
+`A` がリモート未pushの場合は、`--checkout=A` を使ってください。

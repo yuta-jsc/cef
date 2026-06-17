@@ -21,6 +21,7 @@
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/browser/ui/views/frame/contents_web_view.h"
 #include "chrome/common/pref_names.h"
+#include "content/public/common/url_constants.h"
 
 // static
 CefRefPtr<ChromeBrowserHostImpl> ChromeBrowserHostImpl::Create(
@@ -33,7 +34,7 @@ CefRefPtr<ChromeBrowserHostImpl> ChromeBrowserHostImpl::Create(
     // Chrome will navigate to kChromeUINewTabURL by default. We want to keep
     // the current CEF behavior of not navigating at all. Use a special URL that
     // will be recognized in HandleNonNavigationAboutURL.
-    url = GURL("chrome://ignore/");
+    url = GURL(std::string(content::kChromeUIScheme) + "://ignore/");
   }
 
   // Add a new tab. This will indirectly create a new tab WebContents and

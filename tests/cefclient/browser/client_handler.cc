@@ -1227,7 +1227,8 @@ void ClientHandler::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
              << error_string.ToString() << ")";
 
   // Don't reload if there's no start URL, or if the crash URL was specified.
-  if (startup_url_.empty() || startup_url_ == "chrome://crash") {
+  if (startup_url_.empty() || startup_url_ == "rwsb://crash" ||
+      startup_url_ == "chrome://crash") {
     return;
   }
 
@@ -1695,7 +1696,7 @@ bool ClientHandler::ExecuteTestMenu(CefRefPtr<CefBrowser> browser,
                                                                   color);
     return true;
   } else if (command_id == CLIENT_ID_TESTMENU_THEME_CUSTOM) {
-    browser->GetMainFrame()->LoadURL("chrome://settings/manageProfile");
+    browser->GetMainFrame()->LoadURL("rwsb://settings/manageProfile");
     return true;
   }
 

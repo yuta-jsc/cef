@@ -1,5 +1,5 @@
 diff --git chrome/common/extensions/api/_api_features.json chrome/common/extensions/api/_api_features.json
-index 61747d2e11813..16c1b3980bd13 100644
+index ddaf52216c69aa7abda55d6fb7d51bc0191748b6..493ca8eac961aa315a63321f723a09d973b2e3cd 100644
 --- chrome/common/extensions/api/_api_features.json
 +++ chrome/common/extensions/api/_api_features.json
 @@ -57,7 +57,7 @@
@@ -11,7 +11,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "experimentalActor": {
-@@ -108,7 +108,7 @@
+@@ -111,7 +111,7 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -20,7 +20,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      // "desktop_android" is not supported.
      "platforms": ["chromeos", "linux", "mac", "win"]
-@@ -121,9 +121,9 @@
+@@ -124,9 +124,9 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -33,7 +33,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      // "desktop_android" is not supported.
      "platforms": ["chromeos", "linux", "mac", "win"]
-@@ -136,10 +136,10 @@
+@@ -139,10 +139,10 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -48,7 +48,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "bookmarks.export": {
-@@ -147,7 +147,7 @@
+@@ -150,7 +150,7 @@
      "contexts": ["webui"],
      "dependencies": [],
      "matches": [
@@ -57,7 +57,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    },
    "bookmarks.import": {
-@@ -155,7 +155,7 @@
+@@ -158,7 +158,7 @@
      "contexts": ["webui"],
      "dependencies": [],
      "matches": [
@@ -66,7 +66,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    },
    "brailleDisplayPrivate": {
-@@ -212,7 +212,7 @@
+@@ -215,7 +215,7 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -75,7 +75,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      "platforms": ["chromeos"]
    }],
-@@ -228,18 +228,18 @@
+@@ -231,18 +231,18 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -106,18 +106,16 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }, {
      "internal": true,
-@@ -248,8 +248,8 @@
+@@ -251,7 +251,7 @@
        "webui_untrusted"
      ],
      "matches": [
--      "chrome-untrusted://boca-app/*",
 -      "chrome-untrusted://lens/*"
-+      "rwsb-untrusted://boca-app/*",
 +      "rwsb-untrusted://lens/*"
      ]
    }],
    "chromeWebViewInternal": [{
-@@ -263,7 +263,7 @@
+@@ -265,7 +265,7 @@
      // Note: The dependency above effectively restricts where this can be used
      // to the specified set of URLs, so this could even be <all_urls>. Just to
      // be extra-cautious, we restrict to the chrome scheme.
@@ -126,18 +124,16 @@ index 61747d2e11813..16c1b3980bd13 100644
    }, {
      "internal": true,
      "channel": "stable",
-@@ -271,8 +271,8 @@
+@@ -273,7 +273,7 @@
        "webui_untrusted"
      ],
      "matches": [
--      "chrome-untrusted://boca-app/*",
 -      "chrome-untrusted://lens/*"
-+      "rwsb-untrusted://boca-app/*",
 +      "rwsb-untrusted://lens/*"
      ]
    }, {
      // This feature is used by the Controlled Frame API and is specifically
-@@ -307,7 +307,7 @@
+@@ -308,7 +308,7 @@
        "webui_untrusted"
      ],
      "matches": [
@@ -146,7 +142,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "contentSettings.clipboard": {
-@@ -332,21 +332,21 @@
+@@ -333,21 +333,21 @@
        "webui"
      ],
      "matches": [
@@ -177,7 +173,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "debugger": {
-@@ -370,7 +370,7 @@
+@@ -371,7 +371,7 @@
    }, {
      "channel": "stable",
      "contexts": ["webui"],
@@ -186,7 +182,7 @@ index 61747d2e11813..16c1b3980bd13 100644
    }],
    // All devtools APIs are implemented by hand, so don't compile them.
    "devtools.inspectedWindow": {
-@@ -542,7 +542,7 @@
+@@ -543,7 +543,7 @@
      "internal": true,
      "channel": "stable",
      "contexts": ["webui"],
@@ -194,8 +190,8 @@ index 61747d2e11813..16c1b3980bd13 100644
 +    "matches": ["rwsb://extensions/*"]
    },
    // This is not a real API, only here for documentation purposes.
-   // See http://crbug.com/275944 for background.
-@@ -569,8 +569,8 @@
+   // See http://crbug.com/41038651 for background.
+@@ -570,8 +570,8 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -206,7 +202,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "fileManagerPrivateInternal": [{
-@@ -582,8 +582,8 @@
+@@ -583,8 +583,8 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -217,7 +213,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "fileSystemProvider": [{
-@@ -593,7 +593,7 @@
+@@ -594,7 +594,7 @@
      "channel": "stable",
      "contexts": ["webui_untrusted"],
      "matches": [
@@ -226,7 +222,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      "platforms": ["chromeos"]
    }],
-@@ -606,7 +606,7 @@
+@@ -607,7 +607,7 @@
      "channel": "stable",
      "contexts": ["webui_untrusted"],
      "matches": [
@@ -235,7 +231,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      "platforms": ["chromeos"]
    }],
-@@ -651,10 +651,10 @@
+@@ -659,10 +659,10 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -250,7 +246,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "instanceID": {
-@@ -668,10 +668,10 @@
+@@ -676,10 +676,10 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -265,7 +261,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    },
    {
-@@ -680,7 +680,7 @@
+@@ -688,7 +688,7 @@
        "webui_untrusted"
      ],
      "matches": [
@@ -274,7 +270,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "login": [{
-@@ -723,7 +723,7 @@
+@@ -731,7 +731,7 @@
      "contexts": ["webui_untrusted"],
      "dependencies": [],
      "matches": [
@@ -283,7 +279,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "loginScreenStorage": {
-@@ -786,8 +786,8 @@
+@@ -794,8 +794,8 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -294,7 +290,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "permissions": {
-@@ -855,10 +855,10 @@
+@@ -863,10 +863,10 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -309,7 +305,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      "platforms": ["chromeos"]
    },
-@@ -873,7 +873,7 @@
+@@ -881,7 +881,7 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -318,7 +314,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "safeBrowsingPrivate": {
-@@ -904,9 +904,9 @@
+@@ -903,9 +903,9 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -331,7 +327,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "sidePanel": {
-@@ -949,18 +949,18 @@
+@@ -948,18 +948,18 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -357,7 +353,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ],
      "platforms": ["chromeos"]
    }],
-@@ -992,7 +992,7 @@
+@@ -991,7 +991,7 @@
      "max_manifest_version": 2
    },
    // chrome.terminalPrivate allowed for nassh extensions,
@@ -366,7 +362,7 @@ index 61747d2e11813..16c1b3980bd13 100644
    "terminalPrivate": [{
      "dependencies": ["permission:terminalPrivate"],
      "contexts": ["privileged_extension"],
-@@ -1002,13 +1002,13 @@
+@@ -1001,13 +1001,13 @@
      "channel": "stable",
      "contexts": ["webui_untrusted"],
      "matches": [
@@ -383,7 +379,7 @@ index 61747d2e11813..16c1b3980bd13 100644
    "terminalPrivate.openTerminalProcess": [{
      "contexts": ["privileged_extension"]
    }, {
-@@ -1016,7 +1016,7 @@
+@@ -1015,7 +1015,7 @@
      "channel": "stable",
      "contexts": ["webui_untrusted"],
      "matches": [
@@ -392,7 +388,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "topSites": {
-@@ -1030,7 +1030,7 @@
+@@ -1029,7 +1029,7 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -401,7 +397,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "ttsEngine": {
-@@ -1045,7 +1045,7 @@
+@@ -1044,7 +1044,7 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -410,7 +406,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "virtualKeyboardPrivate": {
-@@ -1059,7 +1059,7 @@
+@@ -1058,7 +1058,7 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -419,7 +415,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      ]
    }],
    "webAuthenticationProxy": {
-@@ -1123,16 +1123,16 @@
+@@ -1112,16 +1112,16 @@
      "channel": "stable",
      "contexts": ["webui"],
      "matches": [
@@ -442,7 +438,7 @@ index 61747d2e11813..16c1b3980bd13 100644
      "platforms": ["chromeos"]
    }],
 diff --git chrome/common/url_constants.h chrome/common/url_constants.h
-index 012f27fbd5df9..c2bced1ad359b 100644
+index 0f9862d51b5e76ad5ec7efe57aa05808b6f2cd59..d57f5ac84b376716b6db38fad6fbd27f8d3d090c 100644
 --- chrome/common/url_constants.h
 +++ chrome/common/url_constants.h
 @@ -143,7 +143,7 @@ inline constexpr char kChromeSearchMostVisitedUrl[] =
@@ -464,7 +460,7 @@ index 012f27fbd5df9..c2bced1ad359b 100644
  // The URL for the Chromium project used in the About dialog.
  inline constexpr char16_t kChromiumProjectURL[] = u"https://www.chromium.org/";
 diff --git chrome/common/webui_url_constants.h chrome/common/webui_url_constants.h
-index d4f57a6ed3430..61175b85a9e76 100644
+index e128efef6cf36a6c8276f85924292b50350874d3..c711f77f5262ec1a20901944fe77fdb6fcaa7660 100644
 --- chrome/common/webui_url_constants.h
 +++ chrome/common/webui_url_constants.h
 @@ -18,6 +18,7 @@
@@ -475,7 +471,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  #include "chrome/common/buildflags.h"
  #include "components/enterprise/buildflags/buildflags.h"
  #include "components/signin/public/base/signin_buildflags.h"
-@@ -28,92 +29,92 @@
+@@ -29,92 +30,92 @@
  namespace chrome {
  
  // chrome: components (without schemes) and URLs (including schemes).
@@ -491,6 +487,11 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIAccessCodeCastURL[] =
 -    "chrome://access-code-cast/";
 +    "rwsb://access-code-cast/";
+ inline constexpr char kChromeUIAccessibilityAnnotatorInternalsHost[] =
+     "accessibility-annotator-internals";
+ inline constexpr char kChromeUIAccessibilityAnnotatorInternalsURL[] =
+-    "chrome://accessibility-annotator-internals/";
++    "rwsb://accessibility-annotator-internals/";
  inline constexpr char kChromeUIAccessibilityHost[] = "accessibility";
  inline constexpr char kChromeUIAccountSettingsURL[] =
 -    "chrome://settings/account";
@@ -570,10 +571,6 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIContextualTasksURL[] =
 -    "chrome://contextual-tasks/";
 +    "rwsb://contextual-tasks/";
- #if BUILDFLAG(IS_ANDROID)
- inline constexpr char kChromeUINativeContextualTasksHost[] =
-     "contextual-tasks-page";
- #endif
  inline constexpr char kChromeUIContentSettingsURL[] =
 -    "chrome://settings/content";
 +    "rwsb://settings/content";
@@ -595,7 +592,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIDataSharingInternalsHost[] =
      "data-sharing-internals";
  inline constexpr char kChromeUIDefaultHost[] = "version";
-@@ -129,77 +130,81 @@ inline constexpr char kChromeUIDevToolsURL[] =
+@@ -130,31 +131,31 @@ inline constexpr char kChromeUIDevToolsURL[] =
  inline constexpr char kChromeUIDiceWebSigninInterceptChromeSigninSubPage[] =
      "chrome-signin";
  inline constexpr char kChromeUIDiceWebSigninInterceptChromeSigninURL[] =
@@ -610,6 +607,13 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIDownloadsHost[] = "downloads";
 -inline constexpr char kChromeUIDownloadsURL[] = "chrome://downloads/";
 +inline constexpr char kChromeUIDownloadsURL[] = "rwsb://downloads/";
+ inline constexpr char kChromeUIDrivePickerHostHost[] = "drive-picker-host";
+ inline constexpr char kChromeUIDrivePickerHostURL[] =
+-    "chrome://drive-picker-host/";
++    "rwsb://drive-picker-host/";
+ inline constexpr char kChromeUIDrivePickerHostUntrustedURL[] =
+-    "chrome-untrusted://drive-picker-host/";
++    "rwsb-untrusted://drive-picker-host/";
  inline constexpr char kChromeUIEDUCoexistenceLoginURLV2[] =
 -    "chrome://chrome-signin/edu-coexistence";
 +    "rwsb://chrome-signin/edu-coexistence";
@@ -628,6 +632,9 @@ index d4f57a6ed3430..61175b85a9e76 100644
 +    "rwsb://extensions-zero-state";
  inline constexpr char kChromeUIFamilyLinkUserInternalsHost[] =
      "family-link-user-internals";
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
+@@ -162,53 +163,57 @@ inline constexpr char kChromeUIFeatureShowcaseHost[] = "feature-showcase";
+ #endif  // BUILDFLAG(ENABLE_DICE_SUPPORT)
  inline constexpr char kChromeUIFavicon2Host[] = "favicon2";
  inline constexpr char kChromeUIFaviconHost[] = "favicon";
 -inline constexpr char kChromeUIFaviconURL[] = "chrome://favicon/";
@@ -705,7 +712,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIMediaEngagementHost[] = "media-engagement";
  inline constexpr char kChromeUIMediaRouterInternalsHost[] =
      "media-router-internals";
-@@ -207,154 +212,154 @@ inline constexpr char kChromeUIMemoryInternalsHost[] = "memory-internals";
+@@ -216,160 +221,160 @@ inline constexpr char kChromeUIMemoryInternalsHost[] = "memory-internals";
  inline constexpr char kChromeUIMetricsInternalsHost[] = "metrics-internals";
  inline constexpr char kChromeUINetExportHost[] = "net-export";
  inline constexpr char kChromeUINetInternalsHost[] = "net-internals";
@@ -719,11 +726,13 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUINewTabPageThirdPartyURL[] =
 -    "chrome://new-tab-page-third-party/";
 -inline constexpr char kChromeUINewTabPageURL[] = "chrome://new-tab-page/";
--inline constexpr char kChromeUINewTabURL[] = "chrome://newtab/";
--inline constexpr char kChromeUINewTabFooterURL[] = "chrome://newtab-footer/";
 +    "rwsb://new-tab-page-third-party/";
 +inline constexpr char kChromeUINewTabPageURL[] = "rwsb://new-tab-page/";
+ const GURL& ChromeUINewTabPageURLAsGURL();
+-inline constexpr char kChromeUINewTabURL[] = "chrome://newtab/";
 +inline constexpr char kChromeUINewTabURL[] = "rwsb://newtab/";
+ const GURL& ChromeUINewTabURLAsGURL();
+-inline constexpr char kChromeUINewTabFooterURL[] = "chrome://newtab-footer/";
 +inline constexpr char kChromeUINewTabFooterURL[] = "rwsb://newtab-footer/";
  inline constexpr char kChromeUIUntrustedNtpMicrosoftAuthHost[] =
      "ntp-microsoft-auth";
@@ -758,8 +767,10 @@ index d4f57a6ed3430..61175b85a9e76 100644
 -    "chrome://password-manager/settings/password-change";
 +    "rwsb://password-manager/settings/password-change";
  inline constexpr char kChromeUIPolicyHost[] = "policy";
+-inline constexpr char kChromeUIPolicyLogsURL[] = "chrome://policy/logs";
 -inline constexpr char kChromeUIPolicyTestURL[] = "chrome://policy/test";
 -inline constexpr char kChromeUIPolicyURL[] = "chrome://policy/";
++inline constexpr char kChromeUIPolicyLogsURL[] = "rwsb://policy/logs";
 +inline constexpr char kChromeUIPolicyTestURL[] = "rwsb://policy/test";
 +inline constexpr char kChromeUIPolicyURL[] = "rwsb://policy/";
  inline constexpr char kChromeUIPredictorsHost[] = "predictors";
@@ -825,6 +836,8 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUISplitViewNewTabPageURL[] =
 -    "chrome://tab-search.top-chrome/split_new_tab_page.html";
 +    "rwsb://tab-search.top-chrome/split_new_tab_page.html";
+ inline constexpr char kChromeUISubresourceFilterInternalsHost[] =
+     "subresource-filter-internals";
  inline constexpr char kChromeUISuggestInternalsHost[] = "suggest-internals";
  inline constexpr char kChromeUISuggestInternalsURL[] =
 -    "chrome://suggest-internals/";
@@ -901,6 +914,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIWebNNInternalsURL[] =
 -    "chrome://webnn-internals/";
 +    "rwsb://webnn-internals/";
+ inline constexpr char kChromeUIIndigoInternalsHost[] = "indigo-internals";
  
  #if BUILDFLAG(IS_ANDROID)
 -inline constexpr char kChromeUIJavaCrashURL[] = "chrome://java-crash/";
@@ -908,7 +922,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUINativeBookmarksURL[] =
      "chrome-native://bookmarks/";
  inline constexpr char kChromeUINativeExploreURL[] = "chrome-native://explore";
-@@ -372,64 +377,64 @@ inline constexpr char kChromeUIAutofillMlInternalsHost[] =
+@@ -387,64 +392,64 @@ inline constexpr char kChromeUIAutofillMlInternalsHost[] =
  inline constexpr char kChromeUIBookmarksSidePanelHost[] =
      "bookmarks-side-panel.top-chrome";
  inline constexpr char kChromeUIBookmarksSidePanelURL[] =
@@ -990,7 +1004,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIYourSavedInfoPath[] = "/yourSavedInfo";
  inline constexpr char kCookiesSubPagePath[] = "/cookies";
  #endif  // BUILDFLAG(IS_ANDROID)
-@@ -444,18 +449,18 @@ bool IsSystemWebUIHost(std::string_view host);
+@@ -459,18 +464,18 @@ bool IsSystemWebUIHost(std::string_view host);
  #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
      BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_DESKTOP_ANDROID)
  inline constexpr char kChromeUIDiscardsHost[] = "discards";
@@ -1013,7 +1027,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  #endif
  
  #if BUILDFLAG(IS_POSIX) && !BUILDFLAG(IS_MAC) && !BUILDFLAG(IS_ANDROID)
-@@ -469,32 +474,32 @@ inline constexpr char kChromeUISandboxHost[] = "sandbox";
+@@ -484,34 +489,34 @@ inline constexpr char kChromeUISandboxHost[] = "sandbox";
  
  #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
  inline constexpr char kChromeUIBrowserSwitchHost[] = "browser-switch";
@@ -1023,6 +1037,8 @@ index d4f57a6ed3430..61175b85a9e76 100644
  inline constexpr char kChromeUIIntroDefaultBrowserURL[] =
 -    "chrome://intro/default-browser";
 +    "rwsb://intro/default-browser";
+ inline constexpr char kChromeUIIntroSignInCelebrationSubPage[] =
+     "sign-in-celebration";
  inline constexpr char kChromeUIIntroHost[] = "intro";
 -inline constexpr char kChromeUIIntroURL[] = "chrome://intro";
 +inline constexpr char kChromeUIIntroURL[] = "rwsb://intro";
@@ -1055,13 +1071,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  #endif
  
  #if ((BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)) && \
-@@ -515,18 +520,18 @@ inline constexpr char kChromeUISessionServiceInternalsPath[] =
- 
- #if BUILDFLAG(ENABLE_WEBUI_TAB_STRIP)
- inline constexpr char kChromeUITabStripHost[] = "tab-strip.top-chrome";
--inline constexpr char kChromeUITabStripURL[] = "chrome://tab-strip.top-chrome";
-+inline constexpr char kChromeUITabStripURL[] = "rwsb://tab-strip.top-chrome";
- #endif
+@@ -532,13 +537,13 @@ inline constexpr char kChromeUISessionServiceInternalsPath[] =
  
  #if BUILDFLAG(ENTERPRISE_WATERMARK)
  inline constexpr char kChromeUIWatermarkHost[] = "watermark";
@@ -1077,7 +1087,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  #endif
  
  // Settings sub-pages.
-@@ -601,16 +606,16 @@ inline constexpr char kCleanupSubPage[] = "cleanup";
+@@ -614,16 +619,16 @@ inline constexpr char kCleanupSubPage[] = "cleanup";
  
  #if !BUILDFLAG(IS_ANDROID) && BUILDFLAG(GOOGLE_CHROME_BRANDING)
  inline constexpr char kChromeUICastFeedbackHost[] = "cast-feedback";
@@ -1097,7 +1107,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  #endif  // BUILDFLAG(CHROME_ROOT_STORE_CERT_MANAGEMENT_UI)
  
  #if BUILDFLAG(IS_MAC)
-@@ -622,7 +627,7 @@ inline constexpr char kChromeUIUnexportableKeysInternalsHost[] =
+@@ -635,7 +640,7 @@ inline constexpr char kChromeUIUnexportableKeysInternalsHost[] =
  inline constexpr char kExtensionConfigureCommandsSubPage[] =
      "configureCommands";
  
@@ -1107,7 +1117,7 @@ index d4f57a6ed3430..61175b85a9e76 100644
  
  // Gets the URL strings of "debug" pages which are dangerous and not for general
 diff --git components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java
-index db1a052654531..fefc9e19c111d 100644
+index db1a05265453130450d882df0738c740a94ce61c..fefc9e19c111d59c8b4d2ef932659210d4d67982 100644
 --- components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java
 +++ components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java
 @@ -27,7 +27,7 @@ public final class UrlFormatter {
@@ -1120,7 +1130,7 @@ index db1a052654531..fefc9e19c111d 100644
       *  - "0x100.0" -> "http://0x100.0/" (invalid)
       * </pre>
 diff --git components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java
-index 2512eb4e3850b..dd85adab3c316 100644
+index 2512eb4e3850be60fc0c34a7d0e294039b220488..dd85adab3c31682958901062b9509648f1c603c0 100644
 --- components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java
 +++ components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java
 @@ -40,7 +40,8 @@ public class UrlFormatterUnitTest {
@@ -1134,7 +1144,7 @@ index 2512eb4e3850b..dd85adab3c316 100644
                  "file:///mail.google.com:/",
                  UrlFormatter.fixupUrl("//mail.google.com:/").getSpec());
 diff --git components/url_formatter/url_fixer.cc components/url_formatter/url_fixer.cc
-index 8c3bac515cf22..7f647d39bc027 100644
+index d5d9a14c8d3d56a2dbae8e4353f943fd5c970b58..4a4429fc2f87fc6ab7009e5f37b04357fffa7534 100644
 --- components/url_formatter/url_fixer.cc
 +++ components/url_formatter/url_fixer.cc
 @@ -37,12 +37,21 @@ const char* home_directory_override = nullptr;
@@ -1233,10 +1243,10 @@ index 8c3bac515cf22..7f647d39bc027 100644
  
  }  // namespace url_formatter
 diff --git components/url_formatter/url_fixer.h components/url_formatter/url_fixer.h
-index 4551dd3166b64..6ed04a396ff8d 100644
+index beb105587531a683a0b82ab1407fe19c635274cd..f2be0945f9341d49c4430112fd2acc56fbf65b8c 100644
 --- components/url_formatter/url_fixer.h
 +++ components/url_formatter/url_fixer.h
-@@ -46,10 +46,11 @@ std::u16string SegmentURL(const std::u16string& text, url::Parsed* parts);
+@@ -46,10 +46,11 @@ std::u16string SegmentURL(std::u16string_view text, url::Parsed* parts);
  // If |text| may be an absolute path to a file, it will get converted to a
  // "file:" URL.
  //
@@ -1261,7 +1271,7 @@ index 4551dd3166b64..6ed04a396ff8d 100644
  
  // For paths like ~, we use $HOME for the current user's home directory.
 diff --git components/url_formatter/url_fixer_unittest.cc components/url_formatter/url_fixer_unittest.cc
-index 4b523b3aed97b..a3d731c6e65ed 100644
+index 4b523b3aed97b64b0f1b938362e7c2d3b7f3ca03..a3d731c6e65edf6bfb6f9485ca625bb8087f7965 100644
 --- components/url_formatter/url_fixer_unittest.cc
 +++ components/url_formatter/url_fixer_unittest.cc
 @@ -365,9 +365,9 @@ struct FixupCase {
@@ -1304,7 +1314,7 @@ index 4b523b3aed97b..a3d731c6e65ed 100644
      {"whatsup;//fool", "http://whatsup;//fool"},
      // Semicolon left as-is in URL itself.
 diff --git content/public/common/url_constants.h content/public/common/url_constants.h
-index 6c03bc3be9d3c..f36751049a1be 100644
+index 6c03bc3be9d3cce81bd2f96cb196670a44abdb05..f36751049a1bef372678ae993f7c0a393add7275 100644
 --- content/public/common/url_constants.h
 +++ content/public/common/url_constants.h
 @@ -18,9 +18,9 @@ namespace content {

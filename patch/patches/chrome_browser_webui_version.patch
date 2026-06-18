@@ -124,7 +124,7 @@ index 7d1beedfffbfdd34323cfb749bec83187b54778e..d4c79e26e51deb9a32fb9649a1c21a18
    // Factory for the creating refs in callbacks.
    base::WeakPtrFactory<VersionHandler> weak_ptr_factory_{this};
 diff --git chrome/browser/ui/webui/version/version_ui.cc chrome/browser/ui/webui/version/version_ui.cc
-index 8353f5d5a5734e8fc116dcc0f0221891ff3ea9ff..fcb80273186b9709e106a500e8eb5e3795f0bd8f 100644
+index 8353f5d5a5734e8fc116dcc0f0221891ff3ea9ff..d242b33e543abd8096bf2c2d7f0c5a05d0f1f480 100644
 --- chrome/browser/ui/webui/version/version_ui.cc
 +++ chrome/browser/ui/webui/version/version_ui.cc
 @@ -19,6 +19,7 @@
@@ -168,7 +168,24 @@ index 8353f5d5a5734e8fc116dcc0f0221891ff3ea9ff..fcb80273186b9709e106a500e8eb5e37
  }
  
  std::string GetProductModifier() {
-@@ -257,6 +270,10 @@ void VersionUI::AddVersionDetailStrings(content::WebUIDataSource* html_source) {
+@@ -244,11 +257,16 @@ void VersionUI::AddVersionDetailStrings(content::WebUIDataSource* html_source) {
+ 
+   html_source->AddString(version_ui::kJSEngine, "V8");
+   html_source->AddString(version_ui::kJSVersion, V8_VERSION_STRING);
++#if BUILDFLAG(ENABLE_CEF)
++  html_source->AddString(version_ui::kCopyright,
++                         u"\u00A9 J's Communication.Co., Ltd.");
++#else
+   html_source->AddString(
+       version_ui::kCopyright,
+       base::i18n::MessageFormatter::FormatWithNumberedArgs(
+           l10n_util::GetStringUTF16(IDS_ABOUT_VERSION_COPYRIGHT),
+           base::Time::Now()));
++#endif
+   html_source->AddString(version_ui::kCL, version_info::GetLastChange());
+   html_source->AddString(version_ui::kUserAgent,
+                          embedder_support::GetUserAgent());
+@@ -257,6 +275,10 @@ void VersionUI::AddVersionDetailStrings(content::WebUIDataSource* html_source) {
    // blank.
    html_source->AddString(version_ui::kExecutablePath, std::string_view());
    html_source->AddString(version_ui::kProfilePath, std::string_view());
@@ -233,19 +250,22 @@ index 474768656bdae1d5c212bfd3034c8f8bfe718983..2ca20f8cc7251ad92b1845ce4bc8a2de
 +  font-size: 0.8em;
 +}
 diff --git components/webui/version/resources/about_version.html components/webui/version/resources/about_version.html
-index 3b689206909bf911f4e1d1ed97285a38af615136..83b41ccdc28138ff6ac314ca46dfd7a250dc6453 100644
+index 3b689206909bf911f4e1d1ed97285a38af615136..cb28dc9cba24acd6ed4b49a2ad37a974078158a7 100644
 --- components/webui/version/resources/about_version.html
 +++ components/webui/version/resources/about_version.html
-@@ -49,9 +49,21 @@ about:version template page
+@@ -48,10 +48,25 @@ about:version template page
+           <img alt="$i18n{logo_alt_text}" src="images/product_logo.png">
          </picture>
  </if>
-         <div id="company">$i18n{company}</div>
--        <div id="copyright">$i18n{copyright}</div>
-+        <div id="copyright">$i18n{copyright}
 +<if expr="enable_cef">
++        <div id="copyright">$i18n{copyright}
 +        <br/><a href="rwsb://license">license</a> | <a href="rwsb://credits">credits</a>
-+</if>
 +        </div>
++</if>
++<if expr="not enable_cef">
+         <div id="company">$i18n{company}</div>
+         <div id="copyright">$i18n{copyright}</div>
++</if>
        </div>
        <table id="inner" cellpadding="0" cellspacing="0" border="0">
 +<if expr="enable_cef">
@@ -259,7 +279,7 @@ index 3b689206909bf911f4e1d1ed97285a38af615136..83b41ccdc28138ff6ac314ca46dfd7a2
          <tr><td class="label">$i18n{application_label}</td>
            <td class="version" id="version">
              <span id="copy-content">
-@@ -155,7 +167,15 @@ about:version template page
+@@ -155,7 +170,15 @@ about:version template page
          <tr><td class="label">$i18n{executable_path_name}</td>
            <td class="version" id="executable_path">$i18n{executable_path}</td>
          </tr>
@@ -276,7 +296,7 @@ index 3b689206909bf911f4e1d1ed97285a38af615136..83b41ccdc28138ff6ac314ca46dfd7a2
            <td class="version" id="profile_path">$i18n{profile_path}</td>
          </tr>
  </if>
-@@ -192,6 +212,17 @@ about:version template page
+@@ -192,6 +215,17 @@ about:version template page
            <td class="version" id="sanitizer">$i18n{sanitizer}</td>
          </tr>
        </table>

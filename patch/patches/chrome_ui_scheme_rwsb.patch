@@ -1347,3 +1347,449 @@ index 6c03bc3be9d3cce81bd2f96cb196670a44abdb05..f36751049a1bef372678ae993f7c0a39
  inline constexpr char kUnreachableWebDataURL[] =
      "chrome-error://chromewebdata/";
  
+diff --git extensions/common/api/_api_features.json extensions/common/api/_api_features.json
+index e0abe3daf9ccb5b2e8c3a40c7a129795624273a1..c75606a55a8ae15ce55d8bc8116f0419489cc59e 100644
+--- extensions/common/api/_api_features.json
++++ extensions/common/api/_api_features.json
+@@ -110,8 +110,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bluetooth-pairing/*",
+-      "chrome://os-settings/*"
++      "rwsb://bluetooth-pairing/*",
++      "rwsb://os-settings/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+@@ -127,8 +127,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bluetooth-pairing/*",
+-      "chrome://os-settings/*"
++      "rwsb://bluetooth-pairing/*",
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "bluetoothSocket": {
+@@ -210,9 +210,9 @@
+       "channel": "stable",
+       "contexts": ["webui"],
+       "matches": [
+-        "chrome://feedback/*",
+-        "chrome://cast-feedback/*",
+-        "chrome://os-feedback/*"
++        "rwsb://feedback/*",
++        "rwsb://cast-feedback/*",
++        "rwsb://os-feedback/*"
+       ],
+       // "desktop_android" is not supported.
+       "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -238,7 +238,7 @@
+       "channel": "stable",
+       "contexts": ["webui"],
+       "matches": [
+-        "chrome://feedback/*"
++        "rwsb://feedback/*"
+       ]
+     }
+   ],
+@@ -259,20 +259,20 @@
+       "channel": "stable",
+       "contexts": ["webui"],
+       "matches": [
+-        "chrome://add-supervision/*",
+-        "chrome://contextual-tasks/*",
+-        "chrome://extensions/*",
+-        "chrome://glic/*",
+-        "chrome://glic-fre/*",
+-        "chrome://graduation/*",
+-        "chrome://home/*",
+-        "chrome://chrome-signin/*",
+-        "chrome://mobilesetup/*",
+-        "chrome://oobe/*",
+-        "chrome://os-settings/*",
+-        "chrome://parent-access/*",
+-        "chrome://password-change/*",
+-        "chrome://lock-reauth/*"
++        "rwsb://add-supervision/*",
++        "rwsb://contextual-tasks/*",
++        "rwsb://extensions/*",
++        "rwsb://glic/*",
++        "rwsb://glic-fre/*",
++        "rwsb://graduation/*",
++        "rwsb://home/*",
++        "rwsb://chrome-signin/*",
++        "rwsb://mobilesetup/*",
++        "rwsb://oobe/*",
++        "rwsb://os-settings/*",
++        "rwsb://parent-access/*",
++        "rwsb://password-change/*",
++        "rwsb://lock-reauth/*"
+       ]
+     }, {
+       "internal": true,
+@@ -281,7 +281,7 @@
+         "webui_untrusted"
+       ],
+       "matches": [
+-        "chrome-untrusted://lens/*"
++        "rwsb-untrusted://lens/*"
+       ],
+       // "desktop_android" is not supported.
+       "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -330,8 +330,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://extensions/*",
+-      "chrome://settings/*"
++      "rwsb://extensions/*",
++      "rwsb://settings/*"
+     ]
+   }, {
+     "channel": "stable",
+@@ -379,53 +379,53 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://apps/*",
+-      "chrome://bookmarks/*",
+-      "chrome://bookmarks-side-panel.top-chrome/*",
+-      "chrome://certificate-manager/*",
+-      "chrome://compare/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://customize-chrome-side-panel.top-chrome/*",
+-      "chrome://shopping-insights-side-panel.top-chrome/*",
+-      "chrome://eche-app/*",
+-      "chrome://extensions/*",
+-      "chrome://extensions-zero-state/*",
+-      "chrome://file-manager/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://help-app/*",
+-      "chrome://history/*",
+-      "chrome://new-tab-page/*",
+-      "chrome://newtab-footer/*",
+-      "chrome://omnibox-popup.top-chrome/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://password-manager/*",
+-      "chrome://personalization/*",
+-      "chrome://profile-picker/*",
+-      "chrome://read-later.top-chrome/*",
+-      "chrome://settings/*",
+-      "chrome://sync-confirmation/*",
+-      "chrome://tab-search.top-chrome/*",
+-      "chrome://tab-strip.top-chrome/*",
+-      "chrome://vc-background/*",
+-      "chrome://app-settings/*",
+-      "chrome://search-engine-choice/*"
++      "rwsb://apps/*",
++      "rwsb://bookmarks/*",
++      "rwsb://bookmarks-side-panel.top-chrome/*",
++      "rwsb://certificate-manager/*",
++      "rwsb://compare/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://customize-chrome-side-panel.top-chrome/*",
++      "rwsb://shopping-insights-side-panel.top-chrome/*",
++      "rwsb://eche-app/*",
++      "rwsb://extensions/*",
++      "rwsb://extensions-zero-state/*",
++      "rwsb://file-manager/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://help-app/*",
++      "rwsb://history/*",
++      "rwsb://new-tab-page/*",
++      "rwsb://newtab-footer/*",
++      "rwsb://omnibox-popup.top-chrome/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://password-manager/*",
++      "rwsb://personalization/*",
++      "rwsb://profile-picker/*",
++      "rwsb://read-later.top-chrome/*",
++      "rwsb://settings/*",
++      "rwsb://sync-confirmation/*",
++      "rwsb://tab-search.top-chrome/*",
++      "rwsb://tab-strip.top-chrome/*",
++      "rwsb://vc-background/*",
++      "rwsb://app-settings/*",
++      "rwsb://search-engine-choice/*"
+     ]
+   }, {
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://boca-app/*",
+-      "chrome-untrusted://compose/*",
+-      "chrome-untrusted://help-app/*",
+-      "chrome-untrusted://lens-overlay/*",
+-      "chrome-untrusted://media-app/*",
+-      "chrome-untrusted://mako/*",
+-      "chrome-untrusted://projector/*",
+-      "chrome-untrusted://read-anything-side-panel.top-chrome/*",
+-      "chrome-untrusted://data-sharing/*",
+-      "chrome-untrusted://class-tools-remote-display/*"
++      "rwsb-untrusted://boca-app/*",
++      "rwsb-untrusted://compose/*",
++      "rwsb-untrusted://help-app/*",
++      "rwsb-untrusted://lens-overlay/*",
++      "rwsb-untrusted://media-app/*",
++      "rwsb-untrusted://mako/*",
++      "rwsb-untrusted://projector/*",
++      "rwsb-untrusted://read-anything-side-panel.top-chrome/*",
++      "rwsb-untrusted://data-sharing/*",
++      "rwsb-untrusted://class-tools-remote-display/*"
+     ]
+   }],
+   "metricsPrivateIndividualApis": {
+@@ -480,8 +480,8 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome://apps/*",
+-      "chrome-untrusted://demo-mode-app/*"
++      "rwsb://apps/*",
++      "rwsb-untrusted://demo-mode-app/*"
+     ]
+   },
+   "metricsPrivateIndividualApis.recordMediumTime": {
+@@ -489,7 +489,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://demo-mode-app/*"
++      "rwsb-untrusted://demo-mode-app/*"
+     ]
+   },
+   "metricsPrivateIndividualApis.recordEnumerationValue": {
+@@ -497,7 +497,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://demo-mode-app/*"
++      "rwsb-untrusted://demo-mode-app/*"
+     ]
+   },
+   "mimeHandler": {
+@@ -538,11 +538,11 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://network/*",
+-      "chrome://oobe/*",
+-      "chrome://internet-config-dialog/*",
+-      "chrome://internet-detail-dialog/*",
+-      "chrome://os-settings/*"
++      "rwsb://network/*",
++      "rwsb://oobe/*",
++      "rwsb://internet-config-dialog/*",
++      "rwsb://internet-detail-dialog/*",
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "odfsConfigPrivate": {
+@@ -620,7 +620,7 @@
+     "contexts": ["webui_untrusted"],
+     "matches": [
+       // Allow only terminal_ssh.html in Terminal System Web App.
+-      "chrome-untrusted://terminal/html/terminal_ssh.html*"
++      "rwsb-untrusted://terminal/html/terminal_ssh.html*"
+     ]
+   }],
+   "runtime.connectNative": {
+@@ -713,13 +713,13 @@
+   },{
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://file-manager/*"
++      "rwsb://file-manager/*"
+     ]
+   },{
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ]
+   }],
+   "runtime.sendNativeMessage": {
+@@ -752,7 +752,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -766,7 +766,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -780,7 +780,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -807,7 +807,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://os-settings/*"
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "system.memory": {
+@@ -848,15 +848,15 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://extensions/*",
++      "rwsb://extensions/*",
+       // System Web App version of File Manager.
+-      "chrome://file-manager/*",
+-      "chrome://webui-test/*"
++      "rwsb://file-manager/*",
++      "rwsb://webui-test/*"
+     ]
+   }, {
+     "channel": "stable",
+     "contexts": [ "webui_untrusted" ],
+-    "matches": [ "chrome-untrusted://api-test/*" ]
++    "matches": [ "rwsb-untrusted://api-test/*" ]
+   }, {
+     // This also depends on a special check in the NativeExtensionBindingsSystem
+     // that only exposes it if an associated command line flag is set.
+@@ -917,19 +917,19 @@
+     "internal": true,
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://graduation/*",
+-      "chrome://home/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*",
+-      "chrome://password-change/*",
+-      "chrome://lock-reauth/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://graduation/*",
++      "rwsb://home/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*",
++      "rwsb://password-change/*",
++      "rwsb://lock-reauth/*"
+     ]
+   }, {
+     "internal": true,
+@@ -938,7 +938,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }, {
+     // This feature is used by the Controlled Frame API and is specifically
+@@ -962,19 +962,19 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://graduation/*",
+-      "chrome://home/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*",
+-      "chrome://password-change/*",
+-      "chrome://lock-reauth/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://graduation/*",
++      "rwsb://home/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*",
++      "rwsb://password-change/*",
++      "rwsb://lock-reauth/*"
+     ]
+   }, {
+     "internal": true,
+@@ -983,7 +983,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }, {
+     // This feature is used by the Controlled Frame API and is specifically
+@@ -1005,16 +1005,16 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://graduation/*",
+-      "chrome://home/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://graduation/*",
++      "rwsb://home/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*"
+     ]
+   }, {
+     "channel": "stable",
+@@ -1022,7 +1022,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }]
+ }

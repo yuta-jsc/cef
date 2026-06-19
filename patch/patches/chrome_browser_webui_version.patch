@@ -237,20 +237,8 @@ index 2193019afd18eac09e7812737dc2de3533c2f404..42ec99b0a4673f9ba7c8bbd568a18fa8
 +    configs += [ "//cef/libcef/features:config" ]
 +  }
  }
-diff --git components/webui/version/resources/about_version.css components/webui/version/resources/about_version.css
-index 474768656bdae1d5c212bfd3034c8f8bfe718983..2ca20f8cc7251ad92b1845ce4bc8a2deadbfb592 100644
---- components/webui/version/resources/about_version.css
-+++ components/webui/version/resources/about_version.css
-@@ -134,3 +134,7 @@ body {
-   position: fixed;
-   width: 1px;
- }
-+
-+#footnote {
-+  font-size: 0.8em;
-+}
 diff --git components/webui/version/resources/about_version.html components/webui/version/resources/about_version.html
-index 3b689206909bf911f4e1d1ed97285a38af615136..cb28dc9cba24acd6ed4b49a2ad37a974078158a7 100644
+index 3b689206909bf911f4e1d1ed97285a38af615136..894a347abf3fd42a809158d5e17bb1aa26e908d8 100644
 --- components/webui/version/resources/about_version.html
 +++ components/webui/version/resources/about_version.html
 @@ -48,10 +48,25 @@ about:version template page
@@ -279,41 +267,21 @@ index 3b689206909bf911f4e1d1ed97285a38af615136..cb28dc9cba24acd6ed4b49a2ad37a974
          <tr><td class="label">$i18n{application_label}</td>
            <td class="version" id="version">
              <span id="copy-content">
-@@ -155,7 +170,15 @@ about:version template page
+@@ -155,6 +170,14 @@ about:version template page
          <tr><td class="label">$i18n{executable_path_name}</td>
            <td class="version" id="executable_path">$i18n{executable_path}</td>
          </tr>
--        <tr><td class="label">$i18n{profile_path_name}</td>
 +<if expr="enable_cef">
 +        <tr><td class="label">$i18n{module_path_name}</td>
 +          <td class="version" id="module_path">$i18n{module_path}</td>
 +        </tr>
-+        <tr><td class="label">$i18n{user_data_path_name} <sup><a href="#footnote">[*]</a></sup></td>
++        <tr><td class="label">$i18n{user_data_path_name}</td>
 +          <td class="version" id="user_data_path">$i18n{user_data_path}</td>
 +        </tr>
 +</if>
-+        <tr><td class="label">$i18n{profile_path_name} <sup><a href="#footnote">[*]</a></sup></td>
+         <tr><td class="label">$i18n{profile_path_name}</td>
            <td class="version" id="profile_path">$i18n{profile_path}</td>
          </tr>
- </if>
-@@ -192,6 +215,17 @@ about:version template page
-           <td class="version" id="sanitizer">$i18n{sanitizer}</td>
-         </tr>
-       </table>
-+<if expr="enable_cef">
-+      <div id="footnote">
-+        <br/><a name="footnote">[*] In <a href="https://chromium.googlesource.com/chromium/src/+/master/docs/user_data_dir.md" target="_new">Chromium terminology</a>,
-+        <a href="https://cef-builds.spotifycdn.com/docs/stable.html?structcef__settings__t.html#a2e2be03f34ddd93de90e1cf196757a19" target="_new">CefSettings.root_cache_path</a>
-+        is the "$i18n{user_data_path_name}" and <a href="https://cef-builds.spotifycdn.com/docs/stable.html?structcef__settings__t.html#ad1644a7eb23cad969181db010f007710" target="_new">CefSettings.cache_path</a>
-+        is the "$i18n{profile_path_name}". Chromium's <a href="https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/process_singleton.h#35" target="_new">process singleton lock</a>
-+        protects against multiple app instances writing to the same "$i18n{user_data_path_name}" directory.
-+        Implement <a href="https://cef-builds.spotifycdn.com/docs/stable.html?classCefBrowserProcessHandler.html#a052a91639483467c0b546d57a05c2f06" target="_new">CefBrowserProcessHandler:: OnAlreadyRunningAppRelaunch</a>
-+        to handle the case of app relaunch with the same directory.
-+      </div>
-+</if>
-     </div>
- 
-     <div id="messages" role="alert" aria-live="polite" aria-relevant="additions">
 diff --git components/webui/version/resources/about_version.ts components/webui/version/resources/about_version.ts
 index 09359c34e23a400a49a46e101c01c88883362799..9764d938f832094d9f1e6dddb61b561dc8f8de62 100644
 --- components/webui/version/resources/about_version.ts

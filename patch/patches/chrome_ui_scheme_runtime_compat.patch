@@ -791,7 +791,7 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
    }
  
    // Only writes kPrefDoNotSync when it is not the default.
-@@ -2393,6 +2472,34 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
+@@ -2393,6 +2472,36 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
    }
  }
  

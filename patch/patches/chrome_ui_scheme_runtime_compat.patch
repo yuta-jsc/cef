@@ -803,7 +803,9 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
 +  std::vector<std::pair<ExtensionId, base::DictValue>> rewrites;
 +  const base::DictValue& extensions = prefs_->GetDict(pref_names::kExtensions);
 +
-+  for (const auto& [extension_id, extension] : extensions) {
++  for (auto it = extensions.begin(); it != extensions.end(); ++it) {
++    const ExtensionId& extension_id = it->first;
++    const base::Value& extension = it->second;
 +    const base::DictValue* extension_dict = extension.GetIfDict();
 +    const base::DictValue* manifest =
 +        extension_dict ? extension_dict->FindDict(kPrefManifest) : nullptr;

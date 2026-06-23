@@ -108,6 +108,89 @@ index da84c1fd54c04f4ae474b1f290122d07286fc2b6..f49d679db8abbc335249fe6ae270b236
    ComponentExtensionInfo info(std::move(parsed_manifest), root_directory);
    if (!ignore_allowlist_for_testing_ && !skip_allowlist &&
        !IsComponentExtensionAllowlisted(info.extension_id)) {
+diff --git chrome/browser/process_singleton_win.cc chrome/browser/process_singleton_win.cc
+index 026f480ebe1d47af8b949d6a076a2d053022bda2..4b4de688fa54cdc2c18cec9938b3997fa4868624 100644
+--- chrome/browser/process_singleton_win.cc
++++ chrome/browser/process_singleton_win.cc
+@@ -27,6 +27,7 @@
+ #include "base/win/scoped_handle.h"
+ #include "base/win/windows_version.h"
+ #include "base/win/wmi.h"
++#include "cef/libcef/features/features.h"
+ #include "chrome/browser/process_singleton_internal.h"
+ #include "chrome/browser/shell_integration.h"
+ #include "chrome/browser/ui/simple_message_box.h"
+@@ -49,23 +50,32 @@ const char kLockfile[] = "lockfile";
+ // scope.
+ class AutoLockMutex {
+  public:
+-  explicit AutoLockMutex(HANDLE mutex) : mutex_(mutex) {
++  AutoLockMutex(HANDLE mutex, DWORD timeout_ms)
++      : mutex_(mutex), timeout_ms_(timeout_ms) {
+     TRACE_EVENT0("startup",
+                  "ProcessSingleton:AutoLockMutex:WaitForSingleObject");
+-    DWORD result = ::WaitForSingleObject(mutex_, INFINITE);
+-    DPCHECK(result == WAIT_OBJECT_0) << "Result = " << result;
++    DWORD result = ::WaitForSingleObject(mutex_, timeout_ms_);
++    acquired_ = result == WAIT_OBJECT_0 || result == WAIT_ABANDONED;
++    DPCHECK(acquired_) << "Result = " << result;
+   }
+ 
+   AutoLockMutex(const AutoLockMutex&) = delete;
+   AutoLockMutex& operator=(const AutoLockMutex&) = delete;
+ 
+   ~AutoLockMutex() {
++    if (!acquired_) {
++      return;
++    }
+     BOOL released = ::ReleaseMutex(mutex_);
+     DPCHECK(released);
+   }
+ 
++  bool acquired() const { return acquired_; }
++
+  private:
+   HANDLE mutex_;
++  DWORD timeout_ms_ = INFINITE;
++  bool acquired_ = false;
+ };
+ 
+ // Checks the visibility of the enumerated window and signals once a visible
+@@ -287,8 +297,15 @@ ProcessSingleton::NotifyResult ProcessSingleton::NotifyOtherProcess() {
+           RUNNING_PROCESS_NOTIFY_ERROR);
+       return PROCESS_NONE;
+     case NotifyChromeResult::kWindowHung:
++#if BUILDFLAG(ENABLE_CEF)
++      // CEF browser startup may not yet be pumping the message loop during
++      // repeated launch/shutdown races. Treat this as handled to avoid
++      // terminating a potentially healthy browser process.
++      return PROCESS_NOTIFIED;
++#else
+       // Fall through and potentially terminate the hung browser.
+       break;
++#endif
+   }
+ 
+   // The window is hung.
+@@ -385,7 +402,17 @@ bool ProcessSingleton::Create() {
+       return false;
+     }
+ 
+-    AutoLockMutex auto_lock_only_me(only_me.get());
++    constexpr DWORD kStartupMutexTimeoutMs =
++#if BUILDFLAG(ENABLE_CEF)
++        10 * 1000;
++#else
++        INFINITE;
++#endif
++    AutoLockMutex auto_lock_only_me(only_me.get(), kStartupMutexTimeoutMs);
++    if (!auto_lock_only_me.acquired()) {
++      LOG(ERROR) << "Failed to acquire the process singleton startup mutex.";
++      return false;
++    }
+ 
+     // We now own the mutex so we are the only process that can create the
+     // window at this time, but we must still check if someone created it
 diff --git content/browser/webui/url_data_manager_backend.cc content/browser/webui/url_data_manager_backend.cc
 index 155c29dc585a549b9584346cb4675d4ec3f163a9..fe2b38f7a1ed6efe678da8783414ccb47f07fcdb 100644
 --- content/browser/webui/url_data_manager_backend.cc
@@ -570,3 +653,191 @@ index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca83053
    return bytes_after_replacement;
  }
  
+diff --git extensions/browser/extension_prefs.cc extensions/browser/extension_prefs.cc
+index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa28c3e6168 100644
+--- extensions/browser/extension_prefs.cc
++++ extensions/browser/extension_prefs.cc
+@@ -18,6 +18,7 @@
+ #include "base/containers/flat_set.h"
+ #include "base/json/values_util.h"
+ #include "base/logging.h"
++#include "base/no_destructor.h"
+ #include "base/observer_list.h"
+ #include "base/stl_util.h"
+ #include "base/strings/string_number_conversions.h"
+@@ -30,6 +31,7 @@
+ #include "build/build_config.h"
+ #include "components/content_settings/core/common/content_settings.h"
+ #include "components/crx_file/id_util.h"
++#include "content/public/common/url_constants.h"
+ #include "components/pref_registry/pref_registry_syncable.h"
+ #include "components/prefs/pref_service.h"
+ #include "components/supervised_user/core/common/buildflags.h"
+@@ -231,6 +233,75 @@ constexpr const char kDNREnabledStaticRulesetIDs[] = "dnr_enabled_ruleset_ids";
+ // installation or for extensions where the pref has not been set.
+ constexpr bool kDefaultWithholdingBehavior = false;
+ 
++constexpr char kLegacyChromeUISchemePrefix[] = "chrome://";
++constexpr char kLegacyChromeUIUntrustedSchemePrefix[] = "chrome-untrusted://";
++
++bool IsLegacyChromeSchemeRewriteEnabled() {
++  return !base::EqualsCaseInsensitiveASCII(content::kChromeUIScheme, "chrome");
++}
++
++const std::string& GetCanonicalChromeUISchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(content::kChromeUIScheme) + "://");
++  return *kPrefix;
++}
++
++const std::string& GetCanonicalChromeUIUntrustedSchemePrefix() {
++  static const base::NoDestructor<std::string> kPrefix(
++      std::string(content::kChromeUIUntrustedScheme) + "://");
++  return *kPrefix;
++}
++
++bool RewriteLegacyChromeSchemesInValue(base::Value* value);
++
++bool RewriteLegacyChromeSchemesIfNeeded(std::string* value) {
++  if (!IsLegacyChromeSchemeRewriteEnabled() ||
++      (value->find(kLegacyChromeUISchemePrefix) == std::string::npos &&
++       value->find(kLegacyChromeUIUntrustedSchemePrefix) ==
++           std::string::npos)) {
++    return false;
++  }
++
++  base::ReplaceSubstringsAfterOffset(value, 0, kLegacyChromeUISchemePrefix,
++                                     GetCanonicalChromeUISchemePrefix());
++  base::ReplaceSubstringsAfterOffset(value, 0,
++                                     kLegacyChromeUIUntrustedSchemePrefix,
++                                     GetCanonicalChromeUIUntrustedSchemePrefix());
++  return true;
++}
++
++bool RewriteLegacyChromeSchemesInDict(base::DictValue* dict) {
++  bool changed = false;
++  for (auto it = dict->begin(); it != dict->end(); ++it) {
++    changed |= RewriteLegacyChromeSchemesInValue(&it->second);
++  }
++  return changed;
++}
++
++bool RewriteLegacyChromeSchemesInList(base::ListValue* list) {
++  bool changed = false;
++  for (base::Value& list_value : *list) {
++    changed |= RewriteLegacyChromeSchemesInValue(&list_value);
++  }
++  return changed;
++}
++
++bool RewriteLegacyChromeSchemesInValue(base::Value* value) {
++  if (std::string* string_value = value->GetIfString()) {
++    return RewriteLegacyChromeSchemesIfNeeded(string_value);
++  }
++
++  if (base::DictValue* dict_value = value->GetIfDict()) {
++    return RewriteLegacyChromeSchemesInDict(dict_value);
++  }
++
++  if (base::ListValue* list_value = value->GetIfList()) {
++    return RewriteLegacyChromeSchemesInList(list_value);
++  }
++
++  return false;
++}
++
+ // Checks whether the value passed in is consistent with the expected PrefType.
+ bool CheckPrefType(PrefType pref_type, const base::Value* value) {
+   switch (pref_type) {
+@@ -1545,13 +1616,17 @@ void ExtensionPrefs::UpdateManifest(const Extension* extension) {
+     if (!extension_dict) {
+       return;
+     }
++
++    base::DictValue rewritten_manifest = extension->manifest()->value()->Clone();
++    RewriteLegacyChromeSchemesInDict(&rewritten_manifest);
++
+     const base::DictValue* old_manifest =
+         extension_dict->FindDict(kPrefManifest);
+     bool update_required =
+-        !old_manifest || *extension->manifest()->value() != *old_manifest;
++        !old_manifest || rewritten_manifest != *old_manifest;
+     if (update_required) {
+       UpdateExtensionPref(extension->id(), kPrefManifest,
+-                          base::Value(extension->manifest()->value()->Clone()));
++                          base::Value(std::move(rewritten_manifest)));
+     }
+   }
+ }
+@@ -2049,6 +2124,8 @@ void ExtensionPrefs::WriteDisableReasonsToPrefs(
+ void ExtensionPrefs::InitPrefStore() {
+   TRACE_EVENT0("browser,startup", "ExtensionPrefs::InitPrefStore");
+ 
++  MigrateLegacyChromeSchemesInStoredManifests();
++
+   // When this is called, the PrefService is initialized and provides access
+   // to the user preferences stored in a JSON file.
+   ExtensionsInfo extensions_info =
+@@ -2381,8 +2458,10 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
+   // We store prefs about LOAD extensions, but don't cache their manifest
+   // since it may change on disk.
+   if (!Manifest::IsUnpackedLocation(extension->location())) {
+-    extension_dict->SetKey(
+-        kPrefManifest, base::Value(extension->manifest()->value()->Clone()));
++    base::DictValue rewritten_manifest = extension->manifest()->value()->Clone();
++    RewriteLegacyChromeSchemesInDict(&rewritten_manifest);
++    extension_dict->SetKey(kPrefManifest,
++                           base::Value(std::move(rewritten_manifest)));
+   }
+ 
+   // Only writes kPrefDoNotSync when it is not the default.
+@@ -2393,6 +2472,34 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
+   }
+ }
+ 
++void ExtensionPrefs::MigrateLegacyChromeSchemesInStoredManifests() {
++  if (!IsLegacyChromeSchemeRewriteEnabled()) {
++    return;
++  }
++
++  std::vector<std::pair<ExtensionId, base::DictValue>> rewrites;
++  const base::DictValue& extensions = prefs_->GetDict(pref_names::kExtensions);
++
++  for (const auto& [extension_id, extension] : extensions) {
++    const base::DictValue* extension_dict = extension.GetIfDict();
++    const base::DictValue* manifest =
++        extension_dict ? extension_dict->FindDict(kPrefManifest) : nullptr;
++    if (!manifest) {
++      continue;
++    }
++
++    base::DictValue rewritten_manifest = manifest->Clone();
++    if (RewriteLegacyChromeSchemesInDict(&rewritten_manifest)) {
++      rewrites.emplace_back(extension_id, std::move(rewritten_manifest));
++    }
++  }
++
++  for (auto& [extension_id, rewritten_manifest] : rewrites) {
++    UpdateExtensionPref(extension_id, kPrefManifest,
++                        base::Value(std::move(rewritten_manifest)));
++  }
++}
++
+ void ExtensionPrefs::InitExtensionControlledPrefs(
+     const ExtensionsInfo& extensions_info) {
+   TRACE_EVENT0("browser,startup",
+diff --git extensions/browser/extension_prefs.h extensions/browser/extension_prefs.h
+index ad82b74f482fb7578a8b0e42977b641cf23b87a6..b51145d81dc3c20e4afec08762dbeca9e7a16156 100644
+--- extensions/browser/extension_prefs.h
++++ extensions/browser/extension_prefs.h
+@@ -881,6 +881,10 @@ class ExtensionPrefs : public KeyedService {
+   // pref store. Does nothing if extensions_disabled_ is true.
+   void InitPrefStore();
+ 
++  // Rewrites legacy chrome:// and chrome-untrusted:// entries in stored
++  // extension manifests when the canonical WebUI scheme is non-chrome.
++  void MigrateLegacyChromeSchemesInStoredManifests();
++
+   // Reads the list of strings for `pref` from user prefs into
+   // `id_container_out`. Returns false if the pref wasn't found in the user
+   // pref store.

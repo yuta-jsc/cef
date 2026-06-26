@@ -567,7 +567,10 @@ def GetConfigArgs(args, is_debug, cpu):
 
     # Enable additional BackupRefPtr debug features in non-Official build
     # configurations that support them. See //main/base/memory/raw_ptr.md
-    if (is_debug or platform == 'windows' or is_asan) and \
+    #
+    # Do not force-enable instance tracer for Windows release builds. It can
+    # trigger startup hangs in CefInitialize.
+    if (is_debug or is_asan) and \
         not GetArgValue(args, 'is_component_build', is_debug):
       if is_asan:
         # Enable additional security checks for ASAN. Note that ASAN does not

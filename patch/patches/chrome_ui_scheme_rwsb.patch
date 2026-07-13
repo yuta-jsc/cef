@@ -1,0 +1,1795 @@
+diff --git chrome/common/extensions/api/_api_features.json chrome/common/extensions/api/_api_features.json
+index ddaf52216c69aa7abda55d6fb7d51bc0191748b6..493ca8eac961aa315a63321f723a09d973b2e3cd 100644
+--- chrome/common/extensions/api/_api_features.json
++++ chrome/common/extensions/api/_api_features.json
+@@ -57,7 +57,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://extensions/*"
++      "rwsb://extensions/*"
+     ]
+   }],
+   "experimentalActor": {
+@@ -111,7 +111,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://settings/*"
++      "rwsb://settings/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -124,9 +124,9 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bookmarks/*",
+-      "chrome://bookmarks-side-panel.top-chrome/*",
+-      "chrome://read-later.top-chrome/*"
++      "rwsb://bookmarks/*",
++      "rwsb://bookmarks-side-panel.top-chrome/*",
++      "rwsb://read-later.top-chrome/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -139,10 +139,10 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bookmarks/*",
+-      "chrome://bookmarks-side-panel.top-chrome/*",
+-      "chrome://read-later.top-chrome/*",
+-      "chrome://welcome/*"
++      "rwsb://bookmarks/*",
++      "rwsb://bookmarks-side-panel.top-chrome/*",
++      "rwsb://read-later.top-chrome/*",
++      "rwsb://welcome/*"
+     ]
+   }],
+   "bookmarks.export": {
+@@ -150,7 +150,7 @@
+     "contexts": ["webui"],
+     "dependencies": [],
+     "matches": [
+-      "chrome://bookmarks/*"
++      "rwsb://bookmarks/*"
+     ]
+   },
+   "bookmarks.import": {
+@@ -158,7 +158,7 @@
+     "contexts": ["webui"],
+     "dependencies": [],
+     "matches": [
+-      "chrome://bookmarks/*"
++      "rwsb://bookmarks/*"
+     ]
+   },
+   "brailleDisplayPrivate": {
+@@ -215,7 +215,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://version/*"
++      "rwsb://version/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+@@ -231,18 +231,18 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://graduation/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*",
+-      "chrome://password-change/*",
+-      "chrome://lock-reauth/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://graduation/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*",
++      "rwsb://password-change/*",
++      "rwsb://lock-reauth/*"
+     ]
+   }, {
+     "internal": true,
+@@ -251,7 +251,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }],
+   "chromeWebViewInternal": [{
+@@ -265,7 +265,7 @@
+     // Note: The dependency above effectively restricts where this can be used
+     // to the specified set of URLs, so this could even be <all_urls>. Just to
+     // be extra-cautious, we restrict to the chrome scheme.
+-    "matches": [ "chrome://*/*" ]
++    "matches": [ "rwsb://*/*" ]
+   }, {
+     "internal": true,
+     "channel": "stable",
+@@ -273,7 +273,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }, {
+     // This feature is used by the Controlled Frame API and is specifically
+@@ -308,7 +308,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://boca-app/*"
++      "rwsb-untrusted://boca-app/*"
+     ]
+   }],
+   "contentSettings.clipboard": {
+@@ -333,21 +333,21 @@
+       "webui"
+     ],
+     "matches": [
+-      "chrome://camera-app/*",
+-      "chrome://media-app/*",
+-      "chrome://recorder-app/*"
++      "rwsb://camera-app/*",
++      "rwsb://media-app/*",
++      "rwsb://recorder-app/*"
+     ]
+   },
+   {
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://boca-app/*",
+-      "chrome-untrusted://camera-app/*",
+-      "chrome-untrusted://help-app/*",
+-      "chrome-untrusted://media-app/*",
+-      "chrome-untrusted://projector/*",
+-      "chrome-untrusted://projector-annotator/*"
++      "rwsb-untrusted://boca-app/*",
++      "rwsb-untrusted://camera-app/*",
++      "rwsb-untrusted://help-app/*",
++      "rwsb-untrusted://media-app/*",
++      "rwsb-untrusted://projector/*",
++      "rwsb-untrusted://projector-annotator/*"
+     ]
+   }],
+   "debugger": {
+@@ -371,7 +371,7 @@
+   }, {
+     "channel": "stable",
+     "contexts": ["webui"],
+-    "matches": ["chrome://extensions/*"]
++    "matches": ["rwsb://extensions/*"]
+   }],
+   // All devtools APIs are implemented by hand, so don't compile them.
+   "devtools.inspectedWindow": {
+@@ -543,7 +543,7 @@
+     "internal": true,
+     "channel": "stable",
+     "contexts": ["webui"],
+-    "matches": ["chrome://extensions/*"]
++    "matches": ["rwsb://extensions/*"]
+   },
+   // This is not a real API, only here for documentation purposes.
+   // See http://crbug.com/41038651 for background.
+@@ -570,8 +570,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://file-manager/*",
+-      "chrome://webui-test/*"
++      "rwsb://file-manager/*",
++      "rwsb://webui-test/*"
+     ]
+   }],
+   "fileManagerPrivateInternal": [{
+@@ -583,8 +583,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://file-manager/*",
+-      "chrome://webui-test/*"
++      "rwsb://file-manager/*",
++      "rwsb://webui-test/*"
+     ]
+   }],
+   "fileSystemProvider": [{
+@@ -594,7 +594,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+@@ -607,7 +607,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+@@ -659,10 +659,10 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      // TODO(maybelle): Audit and remove chrome://settings or
+-      // chrome://os-settings as appropriate
+-      "chrome://os-settings/*",
+-      "chrome://settings/*"
++      // TODO(maybelle): Audit and remove rwsb://settings or
++      // rwsb://os-settings as appropriate
++      "rwsb://os-settings/*",
++      "rwsb://settings/*"
+     ]
+   }],
+   "instanceID": {
+@@ -676,10 +676,10 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      // TODO(maybelle): Audit and remove chrome://settings or
+-      // chrome://os-settings as appropriate
+-      "chrome://os-settings/*",
+-      "chrome://settings/*"
++      // TODO(maybelle): Audit and remove rwsb://settings or
++      // rwsb://os-settings as appropriate
++      "rwsb://os-settings/*",
++      "rwsb://settings/*"
+     ]
+   },
+   {
+@@ -688,7 +688,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens-overlay/*"
++      "rwsb-untrusted://lens-overlay/*"
+     ]
+   }],
+   "login": [{
+@@ -731,7 +731,7 @@
+     "contexts": ["webui_untrusted"],
+     "dependencies": [],
+     "matches": [
+-      "chrome-untrusted://class-tools-remote-display/*"
++      "rwsb-untrusted://class-tools-remote-display/*"
+     ]
+   }],
+   "loginScreenStorage": {
+@@ -794,8 +794,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://settings/*",
+-      "chrome://password-manager/*"
++      "rwsb://settings/*",
++      "rwsb://password-manager/*"
+     ]
+   }],
+   "permissions": {
+@@ -863,10 +863,10 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://multidevice-setup/*",
+-      "chrome://os-settings/*",
+-      "chrome://settings/*",
+-      "chrome://oobe/*"
++      "rwsb://multidevice-setup/*",
++      "rwsb://os-settings/*",
++      "rwsb://settings/*",
++      "rwsb://oobe/*"
+     ],
+     "platforms": ["chromeos"]
+   },
+@@ -881,7 +881,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://print/*"
++      "rwsb://print/*"
+     ]
+   }],
+   "safeBrowsingPrivate": {
+@@ -903,9 +903,9 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://os-settings/*",
+-      "chrome://settings/*",
+-      "chrome://password-manager/*"
++      "rwsb://os-settings/*",
++      "rwsb://settings/*",
++      "rwsb://password-manager/*"
+     ]
+   }],
+   "sidePanel": {
+@@ -948,18 +948,18 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bookmarks/*",
+-      "chrome://bookmarks-side-panel.top-chrome/*",
+-      "chrome://read-later.top-chrome/*",
+-      "chrome://tab-strip.top-chrome/*"
++      "rwsb://bookmarks/*",
++      "rwsb://bookmarks-side-panel.top-chrome/*",
++      "rwsb://read-later.top-chrome/*",
++      "rwsb://tab-strip.top-chrome/*"
+     ]
+   }, {
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://crosh/*",
+-      "chrome-untrusted://terminal/*",
+-      "chrome-untrusted://boca-app/*"
++      "rwsb-untrusted://crosh/*",
++      "rwsb-untrusted://terminal/*",
++      "rwsb-untrusted://boca-app/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+@@ -991,7 +991,7 @@
+     "max_manifest_version": 2
+   },
+   // chrome.terminalPrivate allowed for nassh extensions,
+-  // chrome-untrusted://crosh, and chrome-untrusted://terminal.
++  // rwsb-untrusted://crosh, and rwsb-untrusted://terminal.
+   "terminalPrivate": [{
+     "dependencies": ["permission:terminalPrivate"],
+     "contexts": ["privileged_extension"],
+@@ -1001,13 +1001,13 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://crosh/*",
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://crosh/*",
++      "rwsb-untrusted://terminal/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+   // terminalPrivate.openTerminalProcess allowed for nassh extensions,
+-  // and chrome-untrusted://crosh, but NOT for chrome-untrusted://terminal.
++  // and rwsb-untrusted://crosh, but NOT for rwsb-untrusted://terminal.
+   "terminalPrivate.openTerminalProcess": [{
+     "contexts": ["privileged_extension"]
+   }, {
+@@ -1015,7 +1015,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://crosh/*"
++      "rwsb-untrusted://crosh/*"
+     ]
+   }],
+   "topSites": {
+@@ -1029,7 +1029,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://oobe/*"
++      "rwsb://oobe/*"
+     ]
+   }],
+   "ttsEngine": {
+@@ -1044,7 +1044,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://os-settings/*"
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "virtualKeyboardPrivate": {
+@@ -1058,7 +1058,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://file-manager/*"
++      "rwsb://file-manager/*"
+     ]
+   }],
+   "webAuthenticationProxy": {
+@@ -1112,16 +1112,16 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bookmarks/*",
+-      "chrome://tab-strip.top-chrome/*"
++      "rwsb://bookmarks/*",
++      "rwsb://tab-strip.top-chrome/*"
+     ]
+   }, {
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://crosh/*",
+-      "chrome-untrusted://terminal/*",
+-      "chrome-untrusted://boca-app/*"
++      "rwsb-untrusted://crosh/*",
++      "rwsb-untrusted://terminal/*",
++      "rwsb-untrusted://boca-app/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+diff --git chrome/common/url_constants.h chrome/common/url_constants.h
+index 0f9862d51b5e76ad5ec7efe57aa05808b6f2cd59..d57f5ac84b376716b6db38fad6fbd27f8d3d090c 100644
+--- chrome/common/url_constants.h
++++ chrome/common/url_constants.h
+@@ -143,7 +143,7 @@ inline constexpr char kChromeSearchMostVisitedUrl[] =
+ // URL for NTP custom background image selected from the user's machine and
+ // filename for the version of the file in the Profile directory
+ inline constexpr char kChromeUIUntrustedNewTabPageBackgroundUrl[] =
+-    "chrome-untrusted://new-tab-page/background.jpg";
++    "rwsb-untrusted://new-tab-page/background.jpg";
+ inline constexpr char kChromeUIUntrustedNewTabPageBackgroundFilename[] =
+     "background.jpg";
+ 
+@@ -172,7 +172,7 @@ inline constexpr char kChromeSearchScheme[] = "chrome-search";
+ // using an <iframe>. The embedded untrusted content can make web requests and
+ // can include content that is from an external source.
+ inline constexpr char kChromeUIUntrustedNewTabPageUrl[] =
+-    "chrome-untrusted://new-tab-page/";
++    "rwsb-untrusted://new-tab-page/";
+ 
+ // The URL for the Chromium project used in the About dialog.
+ inline constexpr char16_t kChromiumProjectURL[] = u"https://www.chromium.org/";
+diff --git chrome/common/webui_url_constants.h chrome/common/webui_url_constants.h
+index e128efef6cf36a6c8276f85924292b50350874d3..c711f77f5262ec1a20901944fe77fdb6fcaa7660 100644
+--- chrome/common/webui_url_constants.h
++++ chrome/common/webui_url_constants.h
+@@ -18,6 +18,7 @@
+ #include "build/android_buildflags.h"
+ #include "build/branding_buildflags.h"
+ #include "build/build_config.h"
++#include "cef/libcef/features/features.h"
+ #include "chrome/common/buildflags.h"
+ #include "components/enterprise/buildflags/buildflags.h"
+ #include "components/signin/public/base/signin_buildflags.h"
+@@ -29,92 +30,92 @@
+ namespace chrome {
+ 
+ // chrome: components (without schemes) and URLs (including schemes).
+-// e.g. kChromeUIFooHost = "foo" and kChromeUIFooURL = "chrome://foo/"
++// e.g. kChromeUIFooHost = "foo" and kChromeUIFooURL = "rwsb://foo/"
+ // Not all components have corresponding URLs and vice versa. Only add as
+ // needed.
+ // Please keep in alphabetical order, with OS/feature specific sections below.
+ inline constexpr char kChromeUIAboutHost[] = "about";
+-inline constexpr char kChromeUIAboutURL[] = "chrome://about/";
++inline constexpr char kChromeUIAboutURL[] = "rwsb://about/";
+ inline constexpr char kChromeUIAccessCodeCastHost[] = "access-code-cast";
+ inline constexpr char kChromeUIAccessCodeCastURL[] =
+-    "chrome://access-code-cast/";
++    "rwsb://access-code-cast/";
+ inline constexpr char kChromeUIAccessibilityAnnotatorInternalsHost[] =
+     "accessibility-annotator-internals";
+ inline constexpr char kChromeUIAccessibilityAnnotatorInternalsURL[] =
+-    "chrome://accessibility-annotator-internals/";
++    "rwsb://accessibility-annotator-internals/";
+ inline constexpr char kChromeUIAccessibilityHost[] = "accessibility";
+ inline constexpr char kChromeUIAccountSettingsURL[] =
+-    "chrome://settings/account";
++    "rwsb://settings/account";
+ inline constexpr char kChromeUIActivateSafetyCheckSettingsURL[] =
+-    "chrome://settings/safetyCheck?activateSafetyCheck";
++    "rwsb://settings/safetyCheck?activateSafetyCheck";
+ inline constexpr char kChromeUIActorInternalsHost[] = "actor-internals";
+ inline constexpr char kChromeUIActorOverlayHost[] = "actor-overlay";
+-inline constexpr char kChromeUIActorOverlayURL[] = "chrome://actor-overlay";
++inline constexpr char kChromeUIActorOverlayURL[] = "rwsb://actor-overlay";
+ inline constexpr char kChromeUIAddressesPath[] = "/addresses";
+ inline constexpr char kChromeUIAllSitesPath[] = "/content/all";
+ inline constexpr char kChromeUIAppIconHost[] = "app-icon";
+-inline constexpr char kChromeUIAppIconURL[] = "chrome://app-icon/";
++inline constexpr char kChromeUIAppIconURL[] = "rwsb://app-icon/";
+ inline constexpr char kChromeUIAppLauncherPageHost[] = "apps";
+-inline constexpr char kChromeUIAppsURL[] = "chrome://apps/";
++inline constexpr char kChromeUIAppsURL[] = "rwsb://apps/";
+ inline constexpr char kChromeUIAppsWithDeprecationDialogURL[] =
+-    "chrome://apps?showDeletionDialog=";
++    "rwsb://apps?showDeletionDialog=";
+ inline constexpr char kChromeUIAppsWithForceInstalledDeprecationDialogURL[] =
+-    "chrome://apps?showForceInstallDialog=";
++    "rwsb://apps?showForceInstallDialog=";
+ inline constexpr char kChromeUIAutofillAiPath[] = "/enhancedAutofill";
+ inline constexpr char kChromeUIAutofillPath[] = "/autofill";
+ inline constexpr char kChromeUIAutofillInternalsHost[] = "autofill-internals";
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
+ inline constexpr char kChromeUIBatchUploadHost[] = "batch-upload";
+-inline constexpr char kChromeUIBatchUploadURL[] = "chrome://batch-upload/";
++inline constexpr char kChromeUIBatchUploadURL[] = "rwsb://batch-upload/";
+ #endif
+ inline constexpr char kChromeUIBluetoothInternalsHost[] = "bluetooth-internals";
+ inline constexpr char kChromeUIBookmarksHost[] = "bookmarks";
+-inline constexpr char kChromeUIBookmarksURL[] = "chrome://bookmarks/";
++inline constexpr char kChromeUIBookmarksURL[] = "rwsb://bookmarks/";
+ inline constexpr char kChromeUIBrowsingTopicsInternalsHost[] =
+     "topics-internals";
+ inline constexpr char kChromeUICertificateViewerHost[] = "view-cert";
+-inline constexpr char kChromeUICertificateViewerURL[] = "chrome://view-cert/";
++inline constexpr char kChromeUICertificateViewerURL[] = "rwsb://view-cert/";
+ inline constexpr char kChromeUIChromeFindsInternalsHost[] =
+     "chrome-finds-internals";
+ inline constexpr char kChromeUIChromeSigninHost[] = "chrome-signin";
+-inline constexpr char kChromeUIChromeSigninURL[] = "chrome://chrome-signin/";
++inline constexpr char kChromeUIChromeSigninURL[] = "rwsb://chrome-signin/";
+ inline constexpr char kChromeUIChromeURLsHost[] = "chrome-urls";
+-inline constexpr char kChromeUIChromeURLsURL[] = "chrome://chrome-urls/";
+-inline constexpr char16_t kChromeUIChromeURLsURL16[] = u"chrome://chrome-urls/";
++inline constexpr char kChromeUIChromeURLsURL[] = "rwsb://chrome-urls/";
++inline constexpr char16_t kChromeUIChromeURLsURL16[] = u"rwsb://chrome-urls/";
+ inline constexpr char kChromeUIColorPipelineInternalsHost[] =
+     "color-pipeline-internals";
+ inline constexpr char kChromeUIColorPipelineInternalsURL[] =
+-    "chrome://color-pipeline-internals";
++    "rwsb://color-pipeline-internals";
+ inline constexpr char kChromeUIComponentsHost[] = "components";
+-inline constexpr char kChromeUIComponentsUrl[] = "chrome://components";
++inline constexpr char kChromeUIComponentsUrl[] = "rwsb://components";
+ inline constexpr char kChromeUIConflictsHost[] = "conflicts";
+ inline constexpr char kChromeUIConnectorsInternalsHost[] =
+     "connectors-internals";
+ inline constexpr char kChromeUIConstrainedHTMLTestHost[] = "constrained-test";
+ inline constexpr char kChromeUIConstrainedHTMLTestURL[] =
+-    "chrome://constrained-test/";
++    "rwsb://constrained-test/";
+ inline constexpr char kChromeUIContactInfoPath[] = "/contactInfo";
+ #if !BUILDFLAG(IS_ANDROID)
+ inline constexpr char kChromeUIContentAnnotatorInternalsHost[] =
+     "content-annotator-internals";
+ inline constexpr char kChromeUIContentAnnotatorInternalsURL[] =
+-    "chrome://content-annotator-internals/";
++    "rwsb://content-annotator-internals/";
+ #endif
+ inline constexpr char kChromeUIContextualTasksHost[] = "contextual-tasks";
+ inline constexpr char kChromeUIContextualTasksURL[] =
+-    "chrome://contextual-tasks/";
++    "rwsb://contextual-tasks/";
+ inline constexpr char kChromeUIContentSettingsURL[] =
+-    "chrome://settings/content";
++    "rwsb://settings/content";
+ inline constexpr char16_t kChromeUIContentSettingsURL16[] =
+-    u"chrome://settings/content";
++    u"rwsb://settings/content";
+ inline constexpr char16_t kChromeUICookieSettingsURL[] =
+-    u"chrome://settings/cookies";
++    u"rwsb://settings/cookies";
+ inline constexpr char kChromeUICrashesHost[] = "crashes";
+-inline constexpr char kChromeUICrashesUrl[] = "chrome://crashes";
++inline constexpr char kChromeUICrashesUrl[] = "rwsb://crashes";
+ inline constexpr char kChromeUICrashHost[] = "crash";
+ inline constexpr char kChromeUICreditsHost[] = "credits";
+-inline constexpr char kChromeUICreditsURL[] = "chrome://credits/";
+-inline constexpr char16_t kChromeUICreditsURL16[] = u"chrome://credits/";
++inline constexpr char kChromeUICreditsURL[] = "rwsb://credits/";
++inline constexpr char16_t kChromeUICreditsURL16[] = u"rwsb://credits/";
+ inline constexpr char kChromeUIDataSharingInternalsHost[] =
+     "data-sharing-internals";
+ inline constexpr char kChromeUIDefaultHost[] = "version";
+@@ -130,31 +131,31 @@ inline constexpr char kChromeUIDevToolsURL[] =
+ inline constexpr char kChromeUIDiceWebSigninInterceptChromeSigninSubPage[] =
+     "chrome-signin";
+ inline constexpr char kChromeUIDiceWebSigninInterceptChromeSigninURL[] =
+-    "chrome://signin-dice-web-intercept.top-chrome/chrome-signin";
++    "rwsb://signin-dice-web-intercept.top-chrome/chrome-signin";
+ inline constexpr char kChromeUIDiceWebSigninInterceptHost[] =
+     "signin-dice-web-intercept.top-chrome";
+ inline constexpr char kChromeUIDiceWebSigninInterceptURL[] =
+-    "chrome://signin-dice-web-intercept.top-chrome/";
++    "rwsb://signin-dice-web-intercept.top-chrome/";
+ inline constexpr char kChromeUIDownloadInternalsHost[] = "download-internals";
+ inline constexpr char kChromeUIDownloadsHost[] = "downloads";
+-inline constexpr char kChromeUIDownloadsURL[] = "chrome://downloads/";
++inline constexpr char kChromeUIDownloadsURL[] = "rwsb://downloads/";
+ inline constexpr char kChromeUIDrivePickerHostHost[] = "drive-picker-host";
+ inline constexpr char kChromeUIDrivePickerHostURL[] =
+-    "chrome://drive-picker-host/";
++    "rwsb://drive-picker-host/";
+ inline constexpr char kChromeUIDrivePickerHostUntrustedURL[] =
+-    "chrome-untrusted://drive-picker-host/";
++    "rwsb-untrusted://drive-picker-host/";
+ inline constexpr char kChromeUIEDUCoexistenceLoginURLV2[] =
+-    "chrome://chrome-signin/edu-coexistence";
++    "rwsb://chrome-signin/edu-coexistence";
+ inline constexpr char kChromeUIExtensionIconHost[] = "extension-icon";
+-inline constexpr char kChromeUIExtensionIconURL[] = "chrome://extension-icon/";
++inline constexpr char kChromeUIExtensionIconURL[] = "rwsb://extension-icon/";
+ inline constexpr char kChromeUIExtensionsHost[] = "extensions";
+ inline constexpr char kChromeUIExtensionsInternalsHost[] =
+     "extensions-internals";
+-inline constexpr char kChromeUIExtensionsURL[] = "chrome://extensions/";
++inline constexpr char kChromeUIExtensionsURL[] = "rwsb://extensions/";
+ inline constexpr char kChromeUIExtensionsZeroStatePromoHost[] =
+     "extensions-zero-state";
+ inline constexpr char kChromeUIExtensionsZeroStatePromoURL[] =
+-    "chrome://extensions-zero-state";
++    "rwsb://extensions-zero-state";
+ inline constexpr char kChromeUIFamilyLinkUserInternalsHost[] =
+     "family-link-user-internals";
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
+@@ -162,53 +163,57 @@ inline constexpr char kChromeUIFeatureShowcaseHost[] = "feature-showcase";
+ #endif  // BUILDFLAG(ENABLE_DICE_SUPPORT)
+ inline constexpr char kChromeUIFavicon2Host[] = "favicon2";
+ inline constexpr char kChromeUIFaviconHost[] = "favicon";
+-inline constexpr char kChromeUIFaviconURL[] = "chrome://favicon/";
++inline constexpr char kChromeUIFaviconURL[] = "rwsb://favicon/";
+ inline constexpr char kChromeUIFeedbackHost[] = "feedback";
+-inline constexpr char kChromeUIFeedbackURL[] = "chrome://feedback/";
++inline constexpr char kChromeUIFeedbackURL[] = "rwsb://feedback/";
+ inline constexpr char kChromeUIFeedbackReportUnsafeSiteURL[] =
+-    "chrome://feedback/report-unsafe-site";
+-inline constexpr char kChromeUIFileiconURL[] = "chrome://fileicon/";
++    "rwsb://feedback/report-unsafe-site";
++inline constexpr char kChromeUIFileiconURL[] = "rwsb://fileicon/";
+ inline constexpr char kChromeUIFlagsHost[] = "flags";
+-inline constexpr char kChromeUIFlagsURL[] = "chrome://flags/";
+-inline constexpr char16_t kChromeUIFlagsURL16[] = u"chrome://flags/";
++inline constexpr char kChromeUIFlagsURL[] = "rwsb://flags/";
++inline constexpr char16_t kChromeUIFlagsURL16[] = u"rwsb://flags/";
+ inline constexpr char kChromeUIGCMInternalsHost[] = "gcm-internals";
+ inline constexpr char kChromeUIGlicHost[] = "glic";
+-inline constexpr char kChromeUIGlicURL[] = "chrome://glic/";
++inline constexpr char kChromeUIGlicURL[] = "rwsb://glic/";
+ inline constexpr char kChromeUIGlicFreHost[] = "glic-fre";
+-inline constexpr char kChromeUIGlicFreURL[] = "chrome://glic-fre";
++inline constexpr char kChromeUIGlicFreURL[] = "rwsb://glic-fre";
+ inline constexpr char kChromeUIGlicUntrustedHost[] = "glic";
+-inline constexpr char kChromeUIGlicUntrustedURL[] = "chrome-untrusted://glic/";
++inline constexpr char kChromeUIGlicUntrustedURL[] = "rwsb-untrusted://glic/";
+ inline constexpr char kChromeUIGlicSelectionOverlayURL[] =
+-    "chrome-untrusted://glic/selection-overlay/";
++    "rwsb-untrusted://glic/selection-overlay/";
+ inline constexpr char kChromeUIHangUIHost[] = "uithreadhang";
+ inline constexpr char kChromeUIHelpHost[] = "help";
+-inline constexpr char kChromeUIHelpURL[] = "chrome://help/";
++inline constexpr char kChromeUIHelpURL[] = "rwsb://help/";
+ inline constexpr char kChromeUIHistoryHost[] = "history";
+ inline constexpr char kChromeUIHistorySyncedTabs[] = "/syncedTabs";
+-inline constexpr char kChromeUIHistoryURL[] = "chrome://history/";
+-inline constexpr char16_t kChromeUIHistoryURL16[] = u"chrome://history/";
++inline constexpr char kChromeUIHistoryURL[] = "rwsb://history/";
++inline constexpr char16_t kChromeUIHistoryURL16[] = u"rwsb://history/";
+ inline constexpr char kChromeUIIdentityInternalsHost[] = "identity-internals";
+ inline constexpr char kChromeUIInfobarInternalsHost[] = "infobar-internals";
+ inline constexpr char kChromeUIInfobarInternalsURL[] =
+-    "chrome://infobar-internals/";
++    "rwsb://infobar-internals/";
+ inline constexpr char kChromeUIImageHost[] = "image";
+-inline constexpr char kChromeUIImageURL[] = "chrome://image/";
++inline constexpr char kChromeUIImageURL[] = "rwsb://image/";
+ inline constexpr char kChromeUIInspectHost[] = "inspect";
+-inline constexpr char kChromeUIInspectURL[] = "chrome://inspect/";
++inline constexpr char kChromeUIInspectURL[] = "rwsb://inspect/";
+ inline constexpr char kChromeUIInternalDebugPagesDisabledHost[] =
+     "debug-webuis-disabled";
+ inline constexpr char kChromeUIInternalDebugPagesDisabledURL[] =
+-    "chrome://debug-webuis-disabled/";
++    "rwsb://debug-webuis-disabled/";
+ inline constexpr char kChromeUIInternalsHost[] = "internals";
+ inline constexpr char kChromeUIInterstitialHost[] = "interstitials";
+-inline constexpr char kChromeUIInterstitialURL[] = "chrome://interstitials/";
++inline constexpr char kChromeUIInterstitialURL[] = "rwsb://interstitials/";
+ inline constexpr char kChromeUIKillHost[] = "kill";
++#if BUILDFLAG(ENABLE_CEF)
++inline constexpr char kChromeUILicenseHost[] = "license";
++inline constexpr char kChromeUILicenseURL[] = "rwsb://license/";
++#endif
+ inline constexpr char kChromeUILocalStateHost[] = "local-state";
+-inline constexpr char kChromeUILocalStateURL[] = "chrome://local-state";
++inline constexpr char kChromeUILocalStateURL[] = "rwsb://local-state";
+ inline constexpr char kChromeUILocationInternalsHost[] = "location-internals";
+ inline constexpr char kChromeUIManagementHost[] = "management";
+-inline constexpr char kChromeUIManagementURL[] = "chrome://management";
+-inline constexpr char16_t kChromeUIManagementURL16[] = u"chrome://management";
++inline constexpr char kChromeUIManagementURL[] = "rwsb://management";
++inline constexpr char16_t kChromeUIManagementURL16[] = u"rwsb://management";
+ inline constexpr char kChromeUIMediaEngagementHost[] = "media-engagement";
+ inline constexpr char kChromeUIMediaRouterInternalsHost[] =
+     "media-router-internals";
+@@ -216,160 +221,160 @@ inline constexpr char kChromeUIMemoryInternalsHost[] = "memory-internals";
+ inline constexpr char kChromeUIMetricsInternalsHost[] = "metrics-internals";
+ inline constexpr char kChromeUINetExportHost[] = "net-export";
+ inline constexpr char kChromeUINetInternalsHost[] = "net-internals";
+-inline constexpr char kChromeUINetInternalsURL[] = "chrome://net-internals/";
++inline constexpr char kChromeUINetInternalsURL[] = "rwsb://net-internals/";
+ inline constexpr char kChromeUINewTabHost[] = "newtab";
+ inline constexpr char kChromeUINewTabFooterHost[] = "newtab-footer";
+ inline constexpr char kChromeUINewTabPageHost[] = "new-tab-page";
+ inline constexpr char kChromeUINewTabPageThirdPartyHost[] =
+     "new-tab-page-third-party";
+ inline constexpr char kChromeUINewTabPageThirdPartyURL[] =
+-    "chrome://new-tab-page-third-party/";
+-inline constexpr char kChromeUINewTabPageURL[] = "chrome://new-tab-page/";
++    "rwsb://new-tab-page-third-party/";
++inline constexpr char kChromeUINewTabPageURL[] = "rwsb://new-tab-page/";
+ const GURL& ChromeUINewTabPageURLAsGURL();
+-inline constexpr char kChromeUINewTabURL[] = "chrome://newtab/";
++inline constexpr char kChromeUINewTabURL[] = "rwsb://newtab/";
+ const GURL& ChromeUINewTabURLAsGURL();
+-inline constexpr char kChromeUINewTabFooterURL[] = "chrome://newtab-footer/";
++inline constexpr char kChromeUINewTabFooterURL[] = "rwsb://newtab-footer/";
+ inline constexpr char kChromeUIUntrustedNtpMicrosoftAuthHost[] =
+     "ntp-microsoft-auth";
+ inline constexpr char kChromeUIUntrustedNtpMicrosoftAuthURL[] =
+-    "chrome-untrusted://ntp-microsoft-auth/";
++    "rwsb-untrusted://ntp-microsoft-auth/";
+ inline constexpr char kChromeUINTPTilesInternalsHost[] = "ntp-tiles-internals";
+ inline constexpr char kChromeUIOmniboxHost[] = "omnibox";
+ inline constexpr char kChromeUIOmniboxPopupHost[] = "omnibox-popup.top-chrome";
+ inline constexpr char kChromeUIOmniboxPopupURL[] =
+-    "chrome://omnibox-popup.top-chrome/";
++    "rwsb://omnibox-popup.top-chrome/";
+ inline constexpr char kChromeUIOmniboxPopupAimURL[] =
+-    "chrome://omnibox-popup.top-chrome/omnibox_popup_aim.html";
+-inline constexpr char kChromeUIOmniboxURL[] = "chrome://omnibox/";
++    "rwsb://omnibox-popup.top-chrome/omnibox_popup_aim.html";
++inline constexpr char kChromeUIOmniboxURL[] = "rwsb://omnibox/";
+ inline constexpr char kChromeUIOnDeviceTranslationInternalsHost[] =
+     "on-device-translation-internals";
+ inline constexpr char kChromeUIPasswordManagerCheckupURL[] =
+-    "chrome://password-manager/checkup?start=true";
++    "rwsb://password-manager/checkup?start=true";
+ inline constexpr char kChromeUIPasswordManagerInternalsHost[] =
+     "password-manager-internals";
+ inline constexpr char kChromeUIPasswordManagerSettingsURL[] =
+-    "chrome://password-manager/settings";
++    "rwsb://password-manager/settings";
+ inline constexpr char kChromeUIPasswordManagerURL[] =
+-    "chrome://password-manager";
++    "rwsb://password-manager";
+ inline constexpr char kChromeUiPasswordChangeUrl[] =
+-    "chrome://password-manager/settings/password-change";
++    "rwsb://password-manager/settings/password-change";
+ inline constexpr char kChromeUIPolicyHost[] = "policy";
+-inline constexpr char kChromeUIPolicyLogsURL[] = "chrome://policy/logs";
+-inline constexpr char kChromeUIPolicyTestURL[] = "chrome://policy/test";
+-inline constexpr char kChromeUIPolicyURL[] = "chrome://policy/";
++inline constexpr char kChromeUIPolicyLogsURL[] = "rwsb://policy/logs";
++inline constexpr char kChromeUIPolicyTestURL[] = "rwsb://policy/test";
++inline constexpr char kChromeUIPolicyURL[] = "rwsb://policy/";
+ inline constexpr char kChromeUIPredictorsHost[] = "predictors";
+ inline constexpr char kChromeUIPrefsInternalsHost[] = "prefs-internals";
+-inline constexpr char kChromeUIPrintURL[] = "chrome://print/";
++inline constexpr char kChromeUIPrintURL[] = "rwsb://print/";
+ inline constexpr char16_t kChromeUIPrivacySandboxFledgeURL[] =
+-    u"chrome://settings/adPrivacy/sites";
++    u"rwsb://settings/adPrivacy/sites";
+ inline constexpr char kChromeUIPrivacySandboxInternalsHost[] =
+     "privacy-sandbox-internals";
+ inline constexpr char kChromeUIPrivacySandboxInternalsURL[] =
+-    "chrome://privacy-sandbox-internals";
++    "rwsb://privacy-sandbox-internals";
+ inline constexpr char16_t kChromeUIPrivacySandboxManageTopicsLearnMoreURL[] =
+     u"https://support.google.com/chrome?p=ad_privacy";
+ inline constexpr char16_t kChromeUIPrivacySandboxTopicsURL[] =
+-    u"chrome://settings/adPrivacy/interests";
++    u"rwsb://settings/adPrivacy/interests";
+ inline constexpr char kChromeUIProfileInternalsHost[] = "profile-internals";
+ inline constexpr char kChromeUIQuitHost[] = "quit";
+-inline constexpr char kChromeUIQuitURL[] = "chrome://quit/";
++inline constexpr char kChromeUIQuitURL[] = "rwsb://quit/";
+ inline constexpr char kChromeUIResetPasswordHost[] = "reset-password";
+-inline constexpr char kChromeUIResetPasswordURL[] = "chrome://reset-password/";
++inline constexpr char kChromeUIResetPasswordURL[] = "rwsb://reset-password/";
+ inline constexpr char kChromeUIRestartHost[] = "restart";
+-inline constexpr char kChromeUIRestartURL[] = "chrome://restart/";
++inline constexpr char kChromeUIRestartURL[] = "rwsb://restart/";
+ inline constexpr char kChromeUISavedTabGroupsUnsupportedHost[] =
+     "saved-tab-groups-unsupported";
+ inline constexpr char kChromeUISegmentationInternalsHost[] =
+     "segmentation-internals";
+ inline constexpr char kChromeUISettingsHost[] = "settings";
+ inline constexpr char16_t kChromeUISettingsHost16[] = u"settings";
+-inline constexpr char kChromeUISettingsURL[] = "chrome://settings/";
+-inline constexpr char16_t kChromeUISettingsURL16[] = u"chrome://settings/";
++inline constexpr char kChromeUISettingsURL[] = "rwsb://settings/";
++inline constexpr char16_t kChromeUISettingsURL16[] = u"rwsb://settings/";
+ inline constexpr char kChromeUISigninEmailConfirmationHost[] =
+     "signin-email-confirmation";
+ inline constexpr char kChromeUISigninEmailConfirmationURL[] =
+-    "chrome://signin-email-confirmation";
++    "rwsb://signin-email-confirmation";
+ inline constexpr char kChromeUISigninErrorHost[] = "signin-error";
+-inline constexpr char kChromeUISigninErrorURL[] = "chrome://signin-error/";
++inline constexpr char kChromeUISigninErrorURL[] = "rwsb://signin-error/";
+ inline constexpr char kChromeUISignInInternalsHost[] = "signin-internals";
+ #if BUILDFLAG(ENABLE_DICE_SUPPORT)
+ inline constexpr char kChromeUISignoutConfirmationHost[] =
+     "signout-confirmation";
+ inline constexpr char kChromeUISignoutConfirmationURL[] =
+-    "chrome://signout-confirmation";
++    "rwsb://signout-confirmation";
+ #endif
+ inline constexpr char kChromeUISiteEngagementHost[] = "site-engagement";
+ inline constexpr char kChromeUISkillsHost[] = "skills";
+-inline constexpr char kChromeUISkillsURL[] = "chrome://skills/";
++inline constexpr char kChromeUISkillsURL[] = "rwsb://skills/";
+ inline constexpr char kChromeUISkillsDialogPath[] = "dialog";
+ inline constexpr char kChromeUISkillsYourSkillsPath[] = "yourSkills";
+ inline constexpr char kChromeUISkillsBrowsePath[] = "browse";
+ inline constexpr char kChromeUISplitViewNewTabPageURL[] =
+-    "chrome://tab-search.top-chrome/split_new_tab_page.html";
++    "rwsb://tab-search.top-chrome/split_new_tab_page.html";
+ inline constexpr char kChromeUISubresourceFilterInternalsHost[] =
+     "subresource-filter-internals";
+ inline constexpr char kChromeUISuggestInternalsHost[] = "suggest-internals";
+ inline constexpr char kChromeUISuggestInternalsURL[] =
+-    "chrome://suggest-internals/";
++    "rwsb://suggest-internals/";
+ inline constexpr char kChromeUISupervisedUserPassphrasePageHost[] =
+     "managed-user-passphrase";
+ inline constexpr char kChromeUISupportToolHost[] = "support-tool";
+ inline constexpr char kChromeUISyncConfirmationHost[] = "sync-confirmation";
+ inline constexpr char kChromeUISyncConfirmationLoadingPath[] = "loading";
+ inline constexpr char kChromeUISyncConfirmationURL[] =
+-    "chrome://sync-confirmation/";
++    "rwsb://sync-confirmation/";
+ inline constexpr char kChromeUISyncInternalsHost[] = "sync-internals";
+ inline constexpr char kChromeUISystemInfoHost[] = "system";
+ inline constexpr char kChromeUIAiOverlayDialogUntrustedHost[] =
+     "ai-overlay-dialog";
+ inline constexpr char kChromeUIAiOverlayDialogUntrustedURL[] =
+-    "chrome-untrusted://ai-overlay-dialog/";
++    "rwsb-untrusted://ai-overlay-dialog/";
+ inline constexpr char kChromeUITermsHost[] = "terms";
+-inline constexpr char kChromeUITermsURL[] = "chrome://terms/";
++inline constexpr char kChromeUITermsURL[] = "rwsb://terms/";
+ inline constexpr char kChromeUIThemeHost[] = "theme";
+-inline constexpr char kChromeUIThemeURL[] = "chrome://theme/";
++inline constexpr char kChromeUIThemeURL[] = "rwsb://theme/";
+ inline constexpr char kChromeUITopChromeDomain[] = "top-chrome";
+ inline constexpr char kChromeUITranslateInternalsHost[] = "translate-internals";
+ inline constexpr char kChromeUIUntrustedComposeHost[] = "compose";
+ inline constexpr char kChromeUIUntrustedComposeUrl[] =
+-    "chrome-untrusted://compose/";
++    "rwsb-untrusted://compose/";
+ inline constexpr char kChromeUIUntrustedDataSharingHost[] = "data-sharing";
+ inline constexpr char kChromeUIUntrustedDataSharingURL[] =
+-    "chrome-untrusted://data-sharing/";
++    "rwsb-untrusted://data-sharing/";
+ inline constexpr char kChromeUIUntrustedDataSharingAPIURL[] =
+-    "chrome-untrusted://data-sharing/data_sharing_api.html";
++    "rwsb-untrusted://data-sharing/data_sharing_api.html";
+ inline constexpr char kChromeUIUntrustedFavicon2URL[] =
+-    "chrome-untrusted://favicon2/";
++    "rwsb-untrusted://favicon2/";
+ inline constexpr char kChromeUIUntrustedImageEditorURL[] =
+-    "chrome-untrusted://image-editor/";
++    "rwsb-untrusted://image-editor/";
+ inline constexpr char kChromeUIUntrustedPrintURL[] =
+-    "chrome-untrusted://print/";
++    "rwsb-untrusted://print/";
+ inline constexpr char kChromeUIUntrustedThemeURL[] =
+-    "chrome-untrusted://theme/";
++    "rwsb-untrusted://theme/";
+ inline constexpr char kChromeUIUntrustedWebUITestURL[] =
+-    "chrome-untrusted://webui-test/";
++    "rwsb-untrusted://webui-test/";
+ inline constexpr char kChromeUIUsbInternalsHost[] = "usb-internals";
+ inline constexpr char kChromeUIUserActionsHost[] = "user-actions";
+ inline constexpr char kChromeUIUserEducationInternalsHost[] =
+     "user-education-internals";
+ inline constexpr char kChromeUIUserEducationInternalsURL[] =
+-    "chrome://user-education-internals";
++    "rwsb://user-education-internals";
+ inline constexpr char kChromeUIVersionHost[] = "version";
+-inline constexpr char kChromeUIVersionURL[] = "chrome://version/";
+-inline constexpr char16_t kChromeUIVersionURL16[] = u"chrome://version/";
++inline constexpr char kChromeUIVersionURL[] = "rwsb://version/";
++inline constexpr char16_t kChromeUIVersionURL16[] = u"rwsb://version/";
+ inline constexpr char kChromeUIWebRtcLogsHost[] = "webrtc-logs";
+ inline constexpr char kChromeUIWebuiGalleryHost[] = "webui-gallery";
+ inline constexpr char kChromeUIWebUITestHost[] = "webui-test";
+ inline constexpr char kChromeUIWebUIToolbarURL[] =
+-    "chrome://webui-toolbar.top-chrome";
++    "rwsb://webui-toolbar.top-chrome";
+ inline constexpr char kChromeUIWebUIToolbarHost[] = "webui-toolbar.top-chrome";
+ inline constexpr char kChromeUIWebNNInternalsHost[] = "webnn-internals";
+ inline constexpr char kChromeUIWebNNInternalsURL[] =
+-    "chrome://webnn-internals/";
++    "rwsb://webnn-internals/";
+ inline constexpr char kChromeUIIndigoInternalsHost[] = "indigo-internals";
+ 
+ #if BUILDFLAG(IS_ANDROID)
+-inline constexpr char kChromeUIJavaCrashURL[] = "chrome://java-crash/";
++inline constexpr char kChromeUIJavaCrashURL[] = "rwsb://java-crash/";
+ inline constexpr char kChromeUINativeBookmarksURL[] =
+     "chrome-native://bookmarks/";
+ inline constexpr char kChromeUINativeExploreURL[] = "chrome-native://explore";
+@@ -387,64 +392,64 @@ inline constexpr char kChromeUIAutofillMlInternalsHost[] =
+ inline constexpr char kChromeUIBookmarksSidePanelHost[] =
+     "bookmarks-side-panel.top-chrome";
+ inline constexpr char kChromeUIBookmarksSidePanelURL[] =
+-    "chrome://bookmarks-side-panel.top-chrome/";
++    "rwsb://bookmarks-side-panel.top-chrome/";
+ inline constexpr char kChromeUICommentsSidePanelHost[] =
+     "comments-side-panel.top-chrome";
+ inline constexpr char kChromeUICommentsSidePanelURL[] =
+-    "chrome://comments-side-panel.top-chrome/";
++    "rwsb://comments-side-panel.top-chrome/";
+ inline constexpr char kChromeUICustomizeChromeSidePanelHost[] =
+     "customize-chrome-side-panel.top-chrome";
+ inline constexpr char kChromeUICustomizeChromeSidePanelURL[] =
+-    "chrome://customize-chrome-side-panel.top-chrome";
++    "rwsb://customize-chrome-side-panel.top-chrome";
+ inline constexpr char kChromeUIHistorySidePanelHost[] =
+     "history-side-panel.top-chrome";
+ inline constexpr char kChromeUIHistorySidePanelURL[] =
+-    "chrome://history-side-panel.top-chrome/";
++    "rwsb://history-side-panel.top-chrome/";
+ inline constexpr char kChromeUIHistoryClustersSidePanelHost[] =
+     "history-clusters-side-panel.top-chrome";
+ inline constexpr char kChromeUIHistoryClustersSidePanelURL[] =
+-    "chrome://history-clusters-side-panel.top-chrome/";
++    "rwsb://history-clusters-side-panel.top-chrome/";
+ inline constexpr char kChromeUILensHost[] = "lens";
+ inline constexpr char kChromeUILensSidePanelHost[] = "lens";
+ inline constexpr char kChromeUILensUntrustedSidePanelAPIURL[] =
+-    "chrome-untrusted://lens/side_panel/side_panel.html";
++    "rwsb-untrusted://lens/side_panel/side_panel.html";
+ inline constexpr char kChromeUILensUntrustedSidePanelURL[] =
+-    "chrome-untrusted://lens/";
++    "rwsb-untrusted://lens/";
+ inline constexpr char kChromeUILensOverlayHost[] = "lens-overlay";
+ inline constexpr char kChromeUILensOverlayUntrustedURL[] =
+-    "chrome-untrusted://lens-overlay/";
++    "rwsb-untrusted://lens-overlay/";
+ inline constexpr char kChromeUINearbyInternalsHost[] = "nearby-internals";
+ inline constexpr char kChromeUINearbyShareHost[] = "nearby";
+-inline constexpr char kChromeUINearbyShareURL[] = "chrome://nearby/";
++inline constexpr char kChromeUINearbyShareURL[] = "rwsb://nearby/";
+ inline constexpr char kChromeUIOnDeviceInternalsHost[] = "on-device-internals";
+ inline constexpr char kChromeUIPrivateAiInternalsHost[] =
+     "private-ai-internals";
+ inline constexpr char kChromeUIReadLaterHost[] = "read-later.top-chrome";
+ inline constexpr char kChromeUIReadLaterURL[] =
+-    "chrome://read-later.top-chrome/";
++    "rwsb://read-later.top-chrome/";
+ inline constexpr char kChromeUISearchEngineChoiceHost[] =
+     "search-engine-choice";
+ inline constexpr char kChromeUISearchEngineChoiceURL[] =
+-    "chrome://search-engine-choice";
++    "rwsb://search-engine-choice";
+ inline constexpr char kChromeUISearchEngineSettingsPath[] = "/searchEngines";
+ inline constexpr char kChromeUISearchSettingsPath[] = "/search";
+ inline constexpr char kChromeUITabSearchHost[] = "tab-search.top-chrome";
+ inline constexpr char kChromeUITabSearchURL[] =
+-    "chrome://tab-search.top-chrome/";
++    "rwsb://tab-search.top-chrome/";
+ inline constexpr char kChromeUITabsFromOtherDevicesSidePanelHost[] =
+     "tabs-from-other-devices.top-chrome";
+ inline constexpr char kChromeUITabsFromOtherDevicesSidePanelURL[] =
+-    "chrome://tabs-from-other-devices.top-chrome/";
+-inline constexpr char kChromeUIUntrustedFeedURL[] = "chrome-untrusted://feed/";
++    "rwsb://tabs-from-other-devices.top-chrome/";
++inline constexpr char kChromeUIUntrustedFeedURL[] = "rwsb-untrusted://feed/";
+ inline constexpr char kChromeUIUntrustedReadAnythingSidePanelHost[] =
+     "read-anything-side-panel.top-chrome";
+ inline constexpr char kChromeUIUntrustedReadAnythingSidePanelURL[] =
+-    "chrome-untrusted://read-anything-side-panel.top-chrome/";
++    "rwsb-untrusted://read-anything-side-panel.top-chrome/";
+ inline constexpr char kChromeUIWebAppInternalsHost[] = "web-app-internals";
+ inline constexpr char kChromeUIWebuiBrowserHost[] = "webui-browser";
+-inline constexpr char kChromeUIWebuiBrowserURL[] = "chrome://webui-browser/";
++inline constexpr char kChromeUIWebuiBrowserURL[] = "rwsb://webui-browser/";
+ inline constexpr char kChromeUIWebUIJsErrorHost[] = "webuijserror";
+-inline constexpr char kChromeUIWebUIJsErrorURL[] = "chrome://webuijserror/";
++inline constexpr char kChromeUIWebUIJsErrorURL[] = "rwsb://webuijserror/";
+ inline constexpr char kChromeUIYourSavedInfoPath[] = "/yourSavedInfo";
+ inline constexpr char kCookiesSubPagePath[] = "/cookies";
+ #endif  // BUILDFLAG(IS_ANDROID)
+@@ -459,18 +464,18 @@ bool IsSystemWebUIHost(std::string_view host);
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX) || \
+     BUILDFLAG(IS_CHROMEOS) || BUILDFLAG(IS_DESKTOP_ANDROID)
+ inline constexpr char kChromeUIDiscardsHost[] = "discards";
+-inline constexpr char kChromeUIDiscardsURL[] = "chrome://discards/";
++inline constexpr char kChromeUIDiscardsURL[] = "rwsb://discards/";
+ #endif
+ 
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
+ inline constexpr char kChromeUIDefaultBrowserModalURL[] =
+-    "chrome://default-browser-modal/";
++    "rwsb://default-browser-modal/";
+ inline constexpr char kChromeUIDefaultBrowserModalHost[] =
+     "default-browser-modal";
+ inline constexpr char kChromeUIWebAppSettingsHost[] = "app-settings";
+-inline constexpr char kChromeUIWebAppSettingsURL[] = "chrome://app-settings/";
++inline constexpr char kChromeUIWebAppSettingsURL[] = "rwsb://app-settings/";
+ inline constexpr char kChromeUIWhatsNewHost[] = "whats-new";
+-inline constexpr char kChromeUIWhatsNewURL[] = "chrome://whats-new/";
++inline constexpr char kChromeUIWhatsNewURL[] = "rwsb://whats-new/";
+ #endif
+ 
+ #if BUILDFLAG(IS_POSIX) && !BUILDFLAG(IS_MAC) && !BUILDFLAG(IS_ANDROID)
+@@ -484,34 +489,34 @@ inline constexpr char kChromeUISandboxHost[] = "sandbox";
+ 
+ #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC) || BUILDFLAG(IS_LINUX)
+ inline constexpr char kChromeUIBrowserSwitchHost[] = "browser-switch";
+-inline constexpr char kChromeUIBrowserSwitchURL[] = "chrome://browser-switch/";
++inline constexpr char kChromeUIBrowserSwitchURL[] = "rwsb://browser-switch/";
+ inline constexpr char kChromeUIIntroDefaultBrowserSubPage[] = "default-browser";
+ inline constexpr char kChromeUIIntroDefaultBrowserURL[] =
+-    "chrome://intro/default-browser";
++    "rwsb://intro/default-browser";
+ inline constexpr char kChromeUIIntroSignInCelebrationSubPage[] =
+     "sign-in-celebration";
+ inline constexpr char kChromeUIIntroHost[] = "intro";
+-inline constexpr char kChromeUIIntroURL[] = "chrome://intro";
++inline constexpr char kChromeUIIntroURL[] = "rwsb://intro";
+ inline constexpr char kChromeUIManagedUserProfileNoticeHost[] =
+     "managed-user-profile-notice";
+ inline constexpr char kChromeUIManagedUserProfileNoticeUrl[] =
+-    "chrome://managed-user-profile-notice/";
++    "rwsb://managed-user-profile-notice/";
+ inline constexpr char kChromeUIManagedUserProfileNoticeRefreshURL[] =
+-    "chrome://managed-user-profile-notice/"
++    "rwsb://managed-user-profile-notice/"
+     "managed_user_profile_notice_refresh.html";
+ inline constexpr char kChromeUIProfileCustomizationHost[] =
+     "profile-customization";
+ inline constexpr char kChromeUIProfileCustomizationURL[] =
+-    "chrome://profile-customization";
++    "rwsb://profile-customization";
+ inline constexpr char kChromeUIProfilePickerHost[] = "profile-picker";
+ inline constexpr char kChromeUIProfilePickerStartupQuery[] = "startup";
+ inline constexpr char kChromeUIProfilePickerGlicQuery[] = "glic";
+-inline constexpr char kChromeUIProfilePickerUrl[] = "chrome://profile-picker/";
++inline constexpr char kChromeUIProfilePickerUrl[] = "rwsb://profile-picker/";
+ inline constexpr char kChromeUIHistorySyncOptinHost[] = "history-sync-optin";
+ inline constexpr char kChromeUIHistorySyncOptinURL[] =
+-    "chrome://history-sync-optin/";
++    "rwsb://history-sync-optin/";
+ inline constexpr char kChromeUIUpdaterHost[] = "updater";
+-inline constexpr char kChromeUIUpdaterURL[] = "chrome://updater/";
++inline constexpr char kChromeUIUpdaterURL[] = "rwsb://updater/";
+ #endif
+ 
+ #if ((BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)) && \
+@@ -532,13 +537,13 @@ inline constexpr char kChromeUISessionServiceInternalsPath[] =
+ 
+ #if BUILDFLAG(ENTERPRISE_WATERMARK)
+ inline constexpr char kChromeUIWatermarkHost[] = "watermark";
+-inline constexpr char kChromeUIWatermarkURL[] = "chrome://watermark/";
++inline constexpr char kChromeUIWatermarkURL[] = "rwsb://watermark/";
+ #endif
+ 
+ #if BUILDFLAG(ENABLE_SESSION_SERVICE)
+ inline constexpr char kChromeUITabStripInternalsHost[] = "tab-strip-internals";
+ inline constexpr char kChromeUITabStripInternalsURL[] =
+-    "chrome://tab-strip-internals";
++    "rwsb://tab-strip-internals";
+ #endif
+ 
+ // Settings sub-pages.
+@@ -614,16 +619,16 @@ inline constexpr char kCleanupSubPage[] = "cleanup";
+ 
+ #if !BUILDFLAG(IS_ANDROID) && BUILDFLAG(GOOGLE_CHROME_BRANDING)
+ inline constexpr char kChromeUICastFeedbackHost[] = "cast-feedback";
+-inline constexpr char kChromeUICastFeedbackURL[] = "chrome://cast-feedback";
++inline constexpr char kChromeUICastFeedbackURL[] = "rwsb://cast-feedback";
+ #endif
+ 
+ #if BUILDFLAG(CHROME_ROOT_STORE_CERT_MANAGEMENT_UI)
+ inline constexpr char kChromeUICertificateManagerDialogURL[] =
+-    "chrome://certificate-manager";
++    "rwsb://certificate-manager";
+ inline constexpr char kChromeUICertificateManagerHost[] = "certificate-manager";
+ inline constexpr char kChromeUICertificateRedirectPath[] = "/certificates";
+ inline constexpr char kChromeUICertificateRedirectURL[] =
+-    "chrome://settings/certificates";
++    "rwsb://settings/certificates";
+ #endif  // BUILDFLAG(CHROME_ROOT_STORE_CERT_MANAGEMENT_UI)
+ 
+ #if BUILDFLAG(IS_MAC)
+@@ -635,7 +640,7 @@ inline constexpr char kChromeUIUnexportableKeysInternalsHost[] =
+ inline constexpr char kExtensionConfigureCommandsSubPage[] =
+     "configureCommands";
+ 
+-// Gets the hosts/domains that are shown in chrome://chrome-urls.
++// Gets the hosts/domains that are shown in rwsb://chrome-urls.
+ base::span<const base::cstring_view> ChromeURLHosts();
+ 
+ // Gets the URL strings of "debug" pages which are dangerous and not for general
+diff --git components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java
+index db1a05265453130450d882df0738c740a94ce61c..fefc9e19c111d59c8b4d2ef932659210d4d67982 100644
+--- components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java
++++ components/url_formatter/android/java/src/org/chromium/components/url_formatter/UrlFormatter.java
+@@ -27,7 +27,7 @@ public final class UrlFormatter {
+      * <pre>
+      * Given a URL-like string, returns a possibly-invalid GURL. For example:
+      *  - "google.com" -> "http://google.com/"
+-     *  - "about:" -> "chrome://version/"
++     *  - "about:" -> "rwsb://version/"
+      *  - "//mail.google.com:/" -> "file:///mail.google.com:/"
+      *  - "0x100.0" -> "http://0x100.0/" (invalid)
+      * </pre>
+diff --git components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java
+index 2512eb4e3850be60fc0c34a7d0e294039b220488..dd85adab3c31682958901062b9509648f1c603c0 100644
+--- components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java
++++ components/url_formatter/android/javatests/src/org/chromium/components/url_formatter/UrlFormatterUnitTest.java
+@@ -40,7 +40,8 @@ public class UrlFormatterUnitTest {
+     @SmallTest
+     public void testFixupUrl() {
+         assertEquals("http://google.com/", UrlFormatter.fixupUrl("google.com").getSpec());
+-        assertEquals("chrome://version/", UrlFormatter.fixupUrl("about:").getSpec());
++        assertEquals("rwsb://version/", UrlFormatter.fixupUrl("about:").getSpec());
++        assertEquals("rwsb://version/", UrlFormatter.fixupUrl("chrome://version").getSpec());
+         assertEquals(
+                 "file:///mail.google.com:/",
+                 UrlFormatter.fixupUrl("//mail.google.com:/").getSpec());
+diff --git components/url_formatter/url_fixer.cc components/url_formatter/url_fixer.cc
+index d5d9a14c8d3d56a2dbae8e4353f943fd5c970b58..4a4429fc2f87fc6ab7009e5f37b04357fffa7534 100644
+--- components/url_formatter/url_fixer.cc
++++ components/url_formatter/url_fixer.cc
+@@ -37,12 +37,21 @@ const char* home_directory_override = nullptr;
+ namespace {
+ 
+ // Hardcode these constants to avoid dependences on //chrome and //content.
+-const char kChromeUIScheme[] = "chrome";
++const char kChromeUIScheme[] = "rwsb";
++const char kLegacyChromeUIScheme[] = "chrome";
+ const char kDevToolsScheme[] = "devtools";
+ const char kChromeUIDefaultHost[] = "version";
+ const char kViewSourceScheme[] = "view-source";
+ const size_t kMaxFixupURLDepth = 16;
+ 
++bool IsWebUIScheme(std::string_view scheme) {
++  return scheme == kChromeUIScheme || scheme == kLegacyChromeUIScheme;
++}
++
++bool IsAboutOrWebUIScheme(std::string_view scheme) {
++  return scheme == url::kAboutScheme || IsWebUIScheme(scheme);
++}
++
+ // TODO(estade): Remove these ugly, ugly functions. They are only used in
+ // SegmentURL. A url::Parsed object keeps track of a bunch of indices into
+ // a url string, and these need to be updated when the URL is converted from
+@@ -437,15 +446,15 @@ std::string SegmentURLInternal(std::string* text, url::Parsed* parts) {
+   // Otherwise, we need to look at things carefully.
+   if (scheme.empty() && !GetValidScheme(*text, &parts->scheme, &scheme)) {
+     // Try again if there is a ';' in the text. If changing it to a ':' results
+-    // in a standard scheme, "about", "chrome" or "file" scheme being found,
+-    // continue processing with the modified text.
++    // in a standard scheme, "about", "chrome"/"rwsb" or "file" scheme being
++    // found, continue processing with the modified text.
+     bool found_scheme = false;
+     size_t semicolon = text->find(';');
+     if (semicolon != 0 && semicolon != std::string::npos) {
+       (*text)[semicolon] = ':';
+       if (GetValidScheme(*text, &parts->scheme, &scheme) &&
+-          (url::IsStandard(scheme) || scheme == url::kAboutScheme ||
+-           scheme == kChromeUIScheme || scheme == url::kFileScheme)) {
++          (url::IsStandard(scheme) || IsAboutOrWebUIScheme(scheme) ||
++           scheme == url::kFileScheme)) {
+         found_scheme = true;
+       } else {
+         (*text)[semicolon] = ';';
+@@ -458,10 +467,10 @@ std::string SegmentURLInternal(std::string* text, url::Parsed* parts) {
+     }
+   }
+ 
+-  // Proceed with about, chrome, and devtools schemes,
++  // Proceed with about, chrome/rwsb, and devtools schemes,
+   // but not file or nonstandard schemes.
+-  if ((scheme != url::kAboutScheme) && (scheme != kChromeUIScheme) &&
+-      (scheme != kDevToolsScheme) && !url::IsStandard(scheme)) {
++  if (!IsAboutOrWebUIScheme(scheme) && (scheme != kDevToolsScheme) &&
++      !url::IsStandard(scheme)) {
+     return scheme;
+   }
+ 
+@@ -604,7 +613,7 @@ GURL FixupURLInternal(const std::string& text,
+   }
+ 
+   // 'about:blank' and 'about:srcdoc' are special-cased in various places in the
+-  // code and shouldn't use the chrome: scheme.
++  // code and shouldn't use the rwsb: scheme.
+   if (base::EqualsCaseInsensitiveASCII(scheme, url::kAboutScheme)) {
+     GURL about_url(base::ToLowerASCII(trimmed));
+     if (about_url.IsAboutBlank() || about_url.IsAboutSrcdoc()) {
+@@ -613,12 +622,14 @@ GURL FixupURLInternal(const std::string& text,
+   }
+ 
+   // For some schemes whose layouts we understand, we rebuild the URL.
+-  bool chrome_url =
+-      (scheme == url::kAboutScheme) || (scheme == kChromeUIScheme);
++  bool chrome_url = IsAboutOrWebUIScheme(scheme);
+   bool devtools_url = (scheme == kDevToolsScheme);
+   if (chrome_url || devtools_url || url::IsStandard(scheme)) {
+-    // Replace the about: scheme with the chrome: scheme.
+-    std::string url(scheme == url::kAboutScheme ? kChromeUIScheme : scheme);
++    // Replace the about: or chrome: scheme with the rwsb: scheme.
++    std::string url((scheme == url::kAboutScheme ||
++                     scheme == kLegacyChromeUIScheme)
++                        ? kChromeUIScheme
++                        : scheme);
+     url.append(url::kStandardSchemeSeparator);
+ 
+     // We need to check whether the |username| is valid because it is our
+@@ -740,8 +751,7 @@ void OffsetComponent(int offset, url::Component* part) {
+ bool IsEquivalentScheme(const std::string& scheme1,
+                         const std::string& scheme2) {
+   return scheme1 == scheme2 ||
+-         (scheme1 == url::kAboutScheme && scheme2 == kChromeUIScheme) ||
+-         (scheme1 == kChromeUIScheme && scheme2 == url::kAboutScheme);
++         (IsAboutOrWebUIScheme(scheme1) && IsAboutOrWebUIScheme(scheme2));
+ }
+ 
+ }  // namespace url_formatter
+diff --git components/url_formatter/url_fixer.h components/url_formatter/url_fixer.h
+index beb105587531a683a0b82ab1407fe19c635274cd..f2be0945f9341d49c4430112fd2acc56fbf65b8c 100644
+--- components/url_formatter/url_fixer.h
++++ components/url_formatter/url_fixer.h
+@@ -46,10 +46,11 @@ std::u16string SegmentURL(std::u16string_view text, url::Parsed* parts);
+ // If |text| may be an absolute path to a file, it will get converted to a
+ // "file:" URL.
+ //
+-// Schemes "about" and "chrome" are normalized to "chrome://", with slashes.
++// Schemes "about", "chrome" and "rwsb" are normalized to "rwsb://", with
++// slashes.
+ // "about:blank" is unaltered, as Webkit allows frames to access about:blank.
+ // Additionally, if a chrome URL does not have a valid host, as in "about:", the
+-// returned URL will have the host "version", as in "chrome://version".
++// returned URL will have the host "version", as in "rwsb://version".
+ //
+ // If |desired_tld| is non-empty, it represents the TLD the user wishes to
+ // append in the case of an incomplete domain. We check that this is not a file
+@@ -80,7 +81,8 @@ void OffsetComponent(int offset, url::Component* part);
+ 
+ // Returns true if |scheme1| is equivalent to |scheme2|.
+ // Generally this is true if the two schemes are actually identical, but it's
+-// also true when one scheme is "about" and the other "chrome".
++// also true when one scheme is "about", "chrome", or "rwsb" and the other is
++// any of those schemes.
+ bool IsEquivalentScheme(const std::string& scheme1, const std::string& scheme2);
+ 
+ // For paths like ~, we use $HOME for the current user's home directory.
+diff --git components/url_formatter/url_fixer_unittest.cc components/url_formatter/url_fixer_unittest.cc
+index 4b523b3aed97b64b0f1b938362e7c2d3b7f3ca03..a3d731c6e65edf6bfb6f9485ca625bb8087f7965 100644
+--- components/url_formatter/url_fixer_unittest.cc
++++ components/url_formatter/url_fixer_unittest.cc
+@@ -365,9 +365,9 @@ struct FixupCase {
+     {"http://host.com:ninety-two/", "http://host.com:ninety-two/"},
+     {"http://host.com:ninety-two?foo", "http://host.com:ninety-two/?foo"},
+     {"google.com:123", "http://google.com:123/"},
+-    {"about:", "chrome://version/"},
+-    {"about:foo", "chrome://foo/"},
+-    {"about:version", "chrome://version/"},
++    {"about:", "rwsb://version/"},
++    {"about:foo", "rwsb://foo/"},
++    {"about:version", "rwsb://version/"},
+     {"about:blank", "about:blank"},
+     {"About:blaNk", "about:blank"},
+     {"about:blank#blah", "about:blank#blah"},
+@@ -375,10 +375,12 @@ struct FixupCase {
+     {"about:srcdoc", "about:srcdoc"},
+     {"about:srcdoc#blah", "about:srcdoc#blah"},
+     {"about:srcdoc/#blah", "about:srcdoc/#blah"},
+-    {"about:usr:pwd@hst:20/pth?qry#ref", "chrome://hst/pth?qry#ref"},
+-    {"about://usr:pwd@hst/pth?qry#ref", "chrome://hst/pth?qry#ref"},
+-    {"chrome:usr:pwd@hst/pth?qry#ref", "chrome://hst/pth?qry#ref"},
+-    {"chrome://usr:pwd@hst/pth?qry#ref", "chrome://hst/pth?qry#ref"},
++    {"about:usr:pwd@hst:20/pth?qry#ref", "rwsb://hst/pth?qry#ref"},
++    {"about://usr:pwd@hst/pth?qry#ref", "rwsb://hst/pth?qry#ref"},
++    {"chrome:usr:pwd@hst/pth?qry#ref", "rwsb://hst/pth?qry#ref"},
++    {"chrome://usr:pwd@hst/pth?qry#ref", "rwsb://hst/pth?qry#ref"},
++    {"rwsb:usr:pwd@hst/pth?qry#ref", "rwsb://hst/pth?qry#ref"},
++    {"rwsb://usr:pwd@hst/pth?qry#ref", "rwsb://hst/pth?qry#ref"},
+     {"www:123", "http://www:123/"},
+     {"   www:123", "http://www:123/"},
+     {"www.google.com?foo", "http://www.google.com/?foo"},
+@@ -425,7 +427,7 @@ struct FixupCase {
+     {"::1", "http://:1/"},
+     // Semicolon as scheme separator for standard schemes.
+     {"http;//www.google.com/", "http://www.google.com/"},
+-    {"about;help", "chrome://help/"},
++    {"about;help", "rwsb://help/"},
+     // Semicolon in non-standard schemes is not replaced by colon.
+     {"whatsup;//fool", "http://whatsup;//fool"},
+     // Semicolon left as-is in URL itself.
+diff --git content/public/common/url_constants.h content/public/common/url_constants.h
+index 6c03bc3be9d3cce81bd2f96cb196670a44abdb05..f36751049a1bef372678ae993f7c0a393add7275 100644
+--- content/public/common/url_constants.h
++++ content/public/common/url_constants.h
+@@ -18,9 +18,9 @@ namespace content {
+ // from there.
+ inline constexpr char kChromeDevToolsScheme[] = "devtools";
+ inline constexpr char kChromeErrorScheme[] = "chrome-error";
+-inline constexpr char kChromeUIScheme[] = "chrome";  // Used for WebUIs.
++inline constexpr char kChromeUIScheme[] = "rwsb";  // Used for WebUIs.
+ inline constexpr char kChromeNativeScheme[] = "chrome-native";
+-inline constexpr char kChromeUIUntrustedScheme[] = "chrome-untrusted";
++inline constexpr char kChromeUIUntrustedScheme[] = "rwsb-untrusted";
+ inline constexpr char kViewSourceScheme[] = "view-source";
+ #if BUILDFLAG(IS_CHROMEOS)
+ inline constexpr char kExternalFileScheme[] = "externalfile";
+@@ -59,7 +59,7 @@ inline constexpr char kLegacyChromeUITracesInternalsHost[] = "traces-internals";
+ inline constexpr char kChromeUITracingHost[] = "tracing";
+ inline constexpr char kChromeUIUkmHost[] = "ukm";
+ inline constexpr char kChromeUIUntrustedResourcesURL[] =
+-    "chrome-untrusted://resources/";
++    "rwsb-untrusted://resources/";
+ inline constexpr char kChromeUIWebRTCInternalsHost[] = "webrtc-internals";
+ #if BUILDFLAG(ENABLE_VR)
+ inline constexpr char kChromeUIWebXrInternalsHost[] = "webxr-internals";
+@@ -67,7 +67,7 @@ inline constexpr char kChromeUIWebXrInternalsHost[] = "webxr-internals";
+ 
+ // Special URL used to start a navigation to an error page.
+ // This error URL is loaded in normal web renderer processes, so it should not
+-// have a chrome:// scheme that might let it be confused with a WebUI page.
++// have a rwsb:// scheme that might let it be confused with a WebUI page.
+ inline constexpr char kUnreachableWebDataURL[] =
+     "chrome-error://chromewebdata/";
+ 
+diff --git extensions/common/api/_api_features.json extensions/common/api/_api_features.json
+index e0abe3daf9ccb5b2e8c3a40c7a129795624273a1..c75606a55a8ae15ce55d8bc8116f0419489cc59e 100644
+--- extensions/common/api/_api_features.json
++++ extensions/common/api/_api_features.json
+@@ -110,8 +110,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bluetooth-pairing/*",
+-      "chrome://os-settings/*"
++      "rwsb://bluetooth-pairing/*",
++      "rwsb://os-settings/*"
+     ],
+     "platforms": ["chromeos"]
+   }],
+@@ -127,8 +127,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://bluetooth-pairing/*",
+-      "chrome://os-settings/*"
++      "rwsb://bluetooth-pairing/*",
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "bluetoothSocket": {
+@@ -210,9 +210,9 @@
+       "channel": "stable",
+       "contexts": ["webui"],
+       "matches": [
+-        "chrome://feedback/*",
+-        "chrome://cast-feedback/*",
+-        "chrome://os-feedback/*"
++        "rwsb://feedback/*",
++        "rwsb://cast-feedback/*",
++        "rwsb://os-feedback/*"
+       ],
+       // "desktop_android" is not supported.
+       "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -238,7 +238,7 @@
+       "channel": "stable",
+       "contexts": ["webui"],
+       "matches": [
+-        "chrome://feedback/*"
++        "rwsb://feedback/*"
+       ]
+     }
+   ],
+@@ -259,20 +259,20 @@
+       "channel": "stable",
+       "contexts": ["webui"],
+       "matches": [
+-        "chrome://add-supervision/*",
+-        "chrome://contextual-tasks/*",
+-        "chrome://extensions/*",
+-        "chrome://glic/*",
+-        "chrome://glic-fre/*",
+-        "chrome://graduation/*",
+-        "chrome://home/*",
+-        "chrome://chrome-signin/*",
+-        "chrome://mobilesetup/*",
+-        "chrome://oobe/*",
+-        "chrome://os-settings/*",
+-        "chrome://parent-access/*",
+-        "chrome://password-change/*",
+-        "chrome://lock-reauth/*"
++        "rwsb://add-supervision/*",
++        "rwsb://contextual-tasks/*",
++        "rwsb://extensions/*",
++        "rwsb://glic/*",
++        "rwsb://glic-fre/*",
++        "rwsb://graduation/*",
++        "rwsb://home/*",
++        "rwsb://chrome-signin/*",
++        "rwsb://mobilesetup/*",
++        "rwsb://oobe/*",
++        "rwsb://os-settings/*",
++        "rwsb://parent-access/*",
++        "rwsb://password-change/*",
++        "rwsb://lock-reauth/*"
+       ]
+     }, {
+       "internal": true,
+@@ -281,7 +281,7 @@
+         "webui_untrusted"
+       ],
+       "matches": [
+-        "chrome-untrusted://lens/*"
++        "rwsb-untrusted://lens/*"
+       ],
+       // "desktop_android" is not supported.
+       "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -330,8 +330,8 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://extensions/*",
+-      "chrome://settings/*"
++      "rwsb://extensions/*",
++      "rwsb://settings/*"
+     ]
+   }, {
+     "channel": "stable",
+@@ -379,53 +379,53 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://apps/*",
+-      "chrome://bookmarks/*",
+-      "chrome://bookmarks-side-panel.top-chrome/*",
+-      "chrome://certificate-manager/*",
+-      "chrome://compare/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://customize-chrome-side-panel.top-chrome/*",
+-      "chrome://shopping-insights-side-panel.top-chrome/*",
+-      "chrome://eche-app/*",
+-      "chrome://extensions/*",
+-      "chrome://extensions-zero-state/*",
+-      "chrome://file-manager/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://help-app/*",
+-      "chrome://history/*",
+-      "chrome://new-tab-page/*",
+-      "chrome://newtab-footer/*",
+-      "chrome://omnibox-popup.top-chrome/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://password-manager/*",
+-      "chrome://personalization/*",
+-      "chrome://profile-picker/*",
+-      "chrome://read-later.top-chrome/*",
+-      "chrome://settings/*",
+-      "chrome://sync-confirmation/*",
+-      "chrome://tab-search.top-chrome/*",
+-      "chrome://tab-strip.top-chrome/*",
+-      "chrome://vc-background/*",
+-      "chrome://app-settings/*",
+-      "chrome://search-engine-choice/*"
++      "rwsb://apps/*",
++      "rwsb://bookmarks/*",
++      "rwsb://bookmarks-side-panel.top-chrome/*",
++      "rwsb://certificate-manager/*",
++      "rwsb://compare/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://customize-chrome-side-panel.top-chrome/*",
++      "rwsb://shopping-insights-side-panel.top-chrome/*",
++      "rwsb://eche-app/*",
++      "rwsb://extensions/*",
++      "rwsb://extensions-zero-state/*",
++      "rwsb://file-manager/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://help-app/*",
++      "rwsb://history/*",
++      "rwsb://new-tab-page/*",
++      "rwsb://newtab-footer/*",
++      "rwsb://omnibox-popup.top-chrome/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://password-manager/*",
++      "rwsb://personalization/*",
++      "rwsb://profile-picker/*",
++      "rwsb://read-later.top-chrome/*",
++      "rwsb://settings/*",
++      "rwsb://sync-confirmation/*",
++      "rwsb://tab-search.top-chrome/*",
++      "rwsb://tab-strip.top-chrome/*",
++      "rwsb://vc-background/*",
++      "rwsb://app-settings/*",
++      "rwsb://search-engine-choice/*"
+     ]
+   }, {
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://boca-app/*",
+-      "chrome-untrusted://compose/*",
+-      "chrome-untrusted://help-app/*",
+-      "chrome-untrusted://lens-overlay/*",
+-      "chrome-untrusted://media-app/*",
+-      "chrome-untrusted://mako/*",
+-      "chrome-untrusted://projector/*",
+-      "chrome-untrusted://read-anything-side-panel.top-chrome/*",
+-      "chrome-untrusted://data-sharing/*",
+-      "chrome-untrusted://class-tools-remote-display/*"
++      "rwsb-untrusted://boca-app/*",
++      "rwsb-untrusted://compose/*",
++      "rwsb-untrusted://help-app/*",
++      "rwsb-untrusted://lens-overlay/*",
++      "rwsb-untrusted://media-app/*",
++      "rwsb-untrusted://mako/*",
++      "rwsb-untrusted://projector/*",
++      "rwsb-untrusted://read-anything-side-panel.top-chrome/*",
++      "rwsb-untrusted://data-sharing/*",
++      "rwsb-untrusted://class-tools-remote-display/*"
+     ]
+   }],
+   "metricsPrivateIndividualApis": {
+@@ -480,8 +480,8 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome://apps/*",
+-      "chrome-untrusted://demo-mode-app/*"
++      "rwsb://apps/*",
++      "rwsb-untrusted://demo-mode-app/*"
+     ]
+   },
+   "metricsPrivateIndividualApis.recordMediumTime": {
+@@ -489,7 +489,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://demo-mode-app/*"
++      "rwsb-untrusted://demo-mode-app/*"
+     ]
+   },
+   "metricsPrivateIndividualApis.recordEnumerationValue": {
+@@ -497,7 +497,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://demo-mode-app/*"
++      "rwsb-untrusted://demo-mode-app/*"
+     ]
+   },
+   "mimeHandler": {
+@@ -538,11 +538,11 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://network/*",
+-      "chrome://oobe/*",
+-      "chrome://internet-config-dialog/*",
+-      "chrome://internet-detail-dialog/*",
+-      "chrome://os-settings/*"
++      "rwsb://network/*",
++      "rwsb://oobe/*",
++      "rwsb://internet-config-dialog/*",
++      "rwsb://internet-detail-dialog/*",
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "odfsConfigPrivate": {
+@@ -620,7 +620,7 @@
+     "contexts": ["webui_untrusted"],
+     "matches": [
+       // Allow only terminal_ssh.html in Terminal System Web App.
+-      "chrome-untrusted://terminal/html/terminal_ssh.html*"
++      "rwsb-untrusted://terminal/html/terminal_ssh.html*"
+     ]
+   }],
+   "runtime.connectNative": {
+@@ -713,13 +713,13 @@
+   },{
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://file-manager/*"
++      "rwsb://file-manager/*"
+     ]
+   },{
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ]
+   }],
+   "runtime.sendNativeMessage": {
+@@ -752,7 +752,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -766,7 +766,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -780,7 +780,7 @@
+     "channel": "stable",
+     "contexts": ["webui_untrusted"],
+     "matches": [
+-      "chrome-untrusted://terminal/*"
++      "rwsb-untrusted://terminal/*"
+     ],
+     // "desktop_android" is not supported.
+     "platforms": ["chromeos", "linux", "mac", "win"]
+@@ -807,7 +807,7 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://os-settings/*"
++      "rwsb://os-settings/*"
+     ]
+   }],
+   "system.memory": {
+@@ -848,15 +848,15 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://extensions/*",
++      "rwsb://extensions/*",
+       // System Web App version of File Manager.
+-      "chrome://file-manager/*",
+-      "chrome://webui-test/*"
++      "rwsb://file-manager/*",
++      "rwsb://webui-test/*"
+     ]
+   }, {
+     "channel": "stable",
+     "contexts": [ "webui_untrusted" ],
+-    "matches": [ "chrome-untrusted://api-test/*" ]
++    "matches": [ "rwsb-untrusted://api-test/*" ]
+   }, {
+     // This also depends on a special check in the NativeExtensionBindingsSystem
+     // that only exposes it if an associated command line flag is set.
+@@ -917,19 +917,19 @@
+     "internal": true,
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://graduation/*",
+-      "chrome://home/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*",
+-      "chrome://password-change/*",
+-      "chrome://lock-reauth/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://graduation/*",
++      "rwsb://home/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*",
++      "rwsb://password-change/*",
++      "rwsb://lock-reauth/*"
+     ]
+   }, {
+     "internal": true,
+@@ -938,7 +938,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }, {
+     // This feature is used by the Controlled Frame API and is specifically
+@@ -962,19 +962,19 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://glic-fre/*",
+-      "chrome://graduation/*",
+-      "chrome://home/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*",
+-      "chrome://password-change/*",
+-      "chrome://lock-reauth/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://glic-fre/*",
++      "rwsb://graduation/*",
++      "rwsb://home/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*",
++      "rwsb://password-change/*",
++      "rwsb://lock-reauth/*"
+     ]
+   }, {
+     "internal": true,
+@@ -983,7 +983,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }, {
+     // This feature is used by the Controlled Frame API and is specifically
+@@ -1005,16 +1005,16 @@
+     "channel": "stable",
+     "contexts": ["webui"],
+     "matches": [
+-      "chrome://add-supervision/*",
+-      "chrome://chrome-signin/*",
+-      "chrome://contextual-tasks/*",
+-      "chrome://glic/*",
+-      "chrome://graduation/*",
+-      "chrome://home/*",
+-      "chrome://mobilesetup/*",
+-      "chrome://oobe/*",
+-      "chrome://os-settings/*",
+-      "chrome://parent-access/*"
++      "rwsb://add-supervision/*",
++      "rwsb://chrome-signin/*",
++      "rwsb://contextual-tasks/*",
++      "rwsb://glic/*",
++      "rwsb://graduation/*",
++      "rwsb://home/*",
++      "rwsb://mobilesetup/*",
++      "rwsb://oobe/*",
++      "rwsb://os-settings/*",
++      "rwsb://parent-access/*"
+     ]
+   }, {
+     "channel": "stable",
+@@ -1022,7 +1022,7 @@
+       "webui_untrusted"
+     ],
+     "matches": [
+-      "chrome-untrusted://lens/*"
++      "rwsb-untrusted://lens/*"
+     ]
+   }]
+ }

@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <string_view>
 
 #include "include/base/cef_callback.h"
 #include "include/cef_callback.h"
@@ -15,6 +16,17 @@
 namespace {
 
 typedef std::vector<std::string> UrlList;
+
+constexpr char kCanonicalWebUIScheme[] = "rwsb";
+constexpr char kLegacyWebUIScheme[] = "chrome";
+
+std::string MakeWebUIUrl(std::string_view scheme, std::string_view host_and_path) {
+  return std::string(scheme) + "://" + std::string(host_and_path);
+}
+
+std::string MakeCanonicalWebUIUrl(std::string_view host_and_path) {
+  return MakeWebUIUrl(kCanonicalWebUIScheme, host_and_path);
+}
 
 class WebUITestHandler : public TestHandler {
  public:
@@ -128,23 +140,34 @@ class WebUITestHandler : public TestHandler {
 
 // Test hosts with special behaviors.
 
-// about:* URIs should redirect to chrome://*.
+// about:* URIs should redirect to rwsb://*.
 TEST(WebUITest, about) {
   UrlList url_list;
   url_list.push_back("about:license");
   CefRefPtr<WebUITestHandler> handler = new WebUITestHandler(url_list);
-  handler->set_expected_url("chrome://license/");
+  handler->set_expected_url(MakeCanonicalWebUIUrl("license/"));
   handler->ExecuteTest();
   ReleaseAndWaitForDestructor(handler);
 }
 
-// chrome://network-error/X should generate network error X.
+// Legacy chrome://network-error/X should canonicalize and generate network
+// error X.
 TEST(WebUITest, network_error) {
   UrlList url_list;
   // -310 is ERR_TOO_MANY_REDIRECTS
-  url_list.push_back("chrome://network-error/-310");
+  url_list.push_back(MakeWebUIUrl(kLegacyWebUIScheme, "network-error/-310"));
   CefRefPtr<WebUITestHandler> handler = new WebUITestHandler(url_list);
+  handler->set_expected_url(MakeCanonicalWebUIUrl("network-error/-310"));
   handler->set_expected_error_code(ERR_TOO_MANY_REDIRECTS);
+  handler->ExecuteTest();
+  ReleaseAndWaitForDestructor(handler);
+}
+
+TEST(WebUITest, legacy_scheme_redirect) {
+  UrlList url_list;
+  url_list.push_back(MakeWebUIUrl(kLegacyWebUIScheme, "version/"));
+  CefRefPtr<WebUITestHandler> handler = new WebUITestHandler(url_list);
+  handler->set_expected_url(MakeCanonicalWebUIUrl("version/"));
   handler->ExecuteTest();
   ReleaseAndWaitForDestructor(handler);
 }
@@ -171,7 +194,7 @@ void RunWebUITest(const std::string& url) {
   TEST(WebUITest, name) {                                     \
     std::string name_str = #name;                             \
     std::replace(name_str.begin(), name_str.end(), '_', '-'); \
-    RunWebUITest("chrome://" + name_str + "/");               \
+    RunWebUITest(MakeCanonicalWebUIUrl(name_str + "/"));      \
   }
 
 WEBUI_TEST(accessibility)
@@ -193,11 +216,11 @@ WEBUI_TEST(webrtc_internals)
 
 TEST(WebUITest, net_internals) {
   UrlList url_list;
-  url_list.push_back("chrome://net-internals/#events");
-  url_list.push_back("chrome://net-internals/#proxy");
-  url_list.push_back("chrome://net-internals/#dns");
-  url_list.push_back("chrome://net-internals/#sockets");
-  url_list.push_back("chrome://net-internals/#hsts");
+  url_list.push_back(MakeCanonicalWebUIUrl("net-internals/#events"));
+  url_list.push_back(MakeCanonicalWebUIUrl("net-internals/#proxy"));
+  url_list.push_back(MakeCanonicalWebUIUrl("net-internals/#dns"));
+  url_list.push_back(MakeCanonicalWebUIUrl("net-internals/#sockets"));
+  url_list.push_back(MakeCanonicalWebUIUrl("net-internals/#hsts"));
 
   RunWebUITest(url_list);
 }

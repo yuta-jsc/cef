@@ -1,5 +1,5 @@
 diff --git chrome/browser/extensions/component_loader.cc chrome/browser/extensions/component_loader.cc
-index da84c1fd54c04f4ae474b1f290122d07286fc2b6..f49d679db8abbc335249fe6ae270b23601ee6813 100644
+index 1b73a9d46d19682d5302c52a730658c6527c68ef..0c81e9eee4e85e73088789e367ff589c500d4b7e 100644
 --- chrome/browser/extensions/component_loader.cc
 +++ chrome/browser/extensions/component_loader.cc
 @@ -17,7 +17,9 @@
@@ -245,7 +245,7 @@ index 155c29dc585a549b9584346cb4675d4ec3f163a9..fe2b38f7a1ed6efe678da8783414ccb4
    }
  
 diff --git content/browser/webui/web_ui_data_source_impl.cc content/browser/webui/web_ui_data_source_impl.cc
-index 42955f79fe8f60b4b7554167e85b1b369610cec7..03ff129b8c6ba6cd7c2cd7612c26fa5e192c618e 100644
+index 2ef84b73ac6b7e6fb5803cbdbbbc376e77950c18..7d7e22a0e4c17389aa528acb894ee07abf5d5db6 100644
 --- content/browser/webui/web_ui_data_source_impl.cc
 +++ content/browser/webui/web_ui_data_source_impl.cc
 @@ -19,7 +19,9 @@
@@ -360,7 +360,7 @@ index 42955f79fe8f60b4b7554167e85b1b369610cec7..03ff129b8c6ba6cd7c2cd7612c26fa5e
    }
    std::string GetCrossOriginOpenerPolicy() override {
      return parent_->coop_value_;
-@@ -496,19 +569,25 @@ void WebUIDataSourceImpl::StartDataRequest(
+@@ -518,19 +591,25 @@ void WebUIDataSourceImpl::StartDataRequest(
      return;
    }
  
@@ -388,7 +388,7 @@ index 42955f79fe8f60b4b7554167e85b1b369610cec7..03ff129b8c6ba6cd7c2cd7612c26fa5e
      return;
    }
  
-@@ -517,14 +596,14 @@ void WebUIDataSourceImpl::StartDataRequest(
+@@ -539,14 +618,14 @@ void WebUIDataSourceImpl::StartDataRequest(
      auto it = idr_to_file_map_.find(resource_id);
      if (it != idr_to_file_map_.end()) {
        GetDataResourceBytesOnWorkerThreadFromDisk(it->second,
@@ -546,7 +546,7 @@ index 40b3fd5de1aa1a75d4fe706c1e6aae0daf22465a..4ee18fff44cadcca03e984eeab6f8b63
    // time metrics.
    if (!webui::SendData(std::move(headers), std::move(client_remote),
 diff --git content/renderer/local_resource_url_loader_factory.cc content/renderer/local_resource_url_loader_factory.cc
-index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca830535252e491 100644
+index 49be8aa669c8b58f61ae41d35583041a4b4bf577..9b80887689b1812abce3d1dbc882a7ee664111e6 100644
 --- content/renderer/local_resource_url_loader_factory.cc
 +++ content/renderer/local_resource_url_loader_factory.cc
 @@ -11,7 +11,9 @@
@@ -556,10 +556,10 @@ index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca83053
 +#include "base/no_destructor.h"
  #include "base/memory/scoped_refptr.h"
 +#include "base/strings/string_util.h"
+ #include "base/strings/strcat.h"
  #include "base/strings/string_view_util.h"
  #include "base/task/sequenced_task_runner.h"
- #include "base/task/task_traits.h"
-@@ -68,6 +70,50 @@ std::string GetMimeType(const GURL& url) {
+@@ -81,6 +83,50 @@ std::string GetMimeType(const GURL& url) {
    return "text/html";
  }
  
@@ -610,7 +610,7 @@ index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca83053
  // Returns the content of the response for `path` in `source` if found.
  // Note: This only searches for `response_body`, not `resource_id`.
  std::optional<std::string_view> FindResponseInSource(
-@@ -122,8 +168,10 @@ void SendResponse(mojo::PendingRemote<network::mojom::URLLoaderClient> client,
+@@ -135,8 +181,10 @@ void SendResponse(mojo::PendingRemote<network::mojom::URLLoaderClient> client,
    url_response_head->load_timing.request_start_time = now_time;
    url_response_head->load_timing.request_start = now_ticks;
  
@@ -622,7 +622,7 @@ index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca83053
  
    webui::SendData(std::move(url_response_head), std::move(client), std::nullopt,
                    bytes);
-@@ -213,7 +261,7 @@ void LocalResourceURLLoaderFactory::CreateLoaderAndStart(
+@@ -226,7 +274,7 @@ void LocalResourceURLLoaderFactory::CreateLoaderAndStart(
                                      traffic_annotation);
      return;
    }
@@ -631,7 +631,7 @@ index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca83053
    CHECK(request.url.GetScheme() == kChromeUIScheme);
    // Parallelize calls to GetResourceAndRespond across multiple threads.
    // Needs to be posted to a SequencedTaskRunner as Mojo requires a
-@@ -344,6 +392,21 @@ LocalResourceURLLoaderFactory::GetResource(
+@@ -357,6 +405,21 @@ LocalResourceURLLoaderFactory::GetResource(
          std::move(replaced_string));
    }
  
@@ -654,7 +654,7 @@ index 4730d0f883dd3e888722b6e9ac441447193c1eff..342b4f4dc33f9cdc9877c2743ca83053
  }
  
 diff --git extensions/browser/extension_prefs.cc extensions/browser/extension_prefs.cc
-index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa28c3e6168 100644
+index 5ef2bc3b2ac8182c8ed53c0586f7fe402a65a7b5..7d8f63b5211f05b7e2b1ca94923e643fa5270533 100644
 --- extensions/browser/extension_prefs.cc
 +++ extensions/browser/extension_prefs.cc
 @@ -18,6 +18,7 @@
@@ -673,7 +673,7 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
  #include "components/pref_registry/pref_registry_syncable.h"
  #include "components/prefs/pref_service.h"
  #include "components/supervised_user/core/common/buildflags.h"
-@@ -231,6 +233,75 @@ constexpr const char kDNREnabledStaticRulesetIDs[] = "dnr_enabled_ruleset_ids";
+@@ -230,6 +232,75 @@ constexpr const char kDNREnabledStaticRulesetIDs[] = "dnr_enabled_ruleset_ids";
  // installation or for extensions where the pref has not been set.
  constexpr bool kDefaultWithholdingBehavior = false;
  
@@ -749,7 +749,7 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
  // Checks whether the value passed in is consistent with the expected PrefType.
  bool CheckPrefType(PrefType pref_type, const base::Value* value) {
    switch (pref_type) {
-@@ -1545,13 +1616,17 @@ void ExtensionPrefs::UpdateManifest(const Extension* extension) {
+@@ -1544,13 +1615,17 @@ void ExtensionPrefs::UpdateManifest(const Extension* extension) {
      if (!extension_dict) {
        return;
      }
@@ -769,7 +769,7 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
      }
    }
  }
-@@ -2049,6 +2124,8 @@ void ExtensionPrefs::WriteDisableReasonsToPrefs(
+@@ -2048,6 +2123,8 @@ void ExtensionPrefs::WriteDisableReasonsToPrefs(
  void ExtensionPrefs::InitPrefStore() {
    TRACE_EVENT0("browser,startup", "ExtensionPrefs::InitPrefStore");
  
@@ -778,7 +778,7 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
    // When this is called, the PrefService is initialized and provides access
    // to the user preferences stored in a JSON file.
    ExtensionsInfo extensions_info =
-@@ -2381,8 +2458,10 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
+@@ -2382,8 +2459,10 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
    // We store prefs about LOAD extensions, but don't cache their manifest
    // since it may change on disk.
    if (!Manifest::IsUnpackedLocation(extension->location())) {
@@ -791,7 +791,7 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
    }
  
    // Only writes kPrefDoNotSync when it is not the default.
-@@ -2393,6 +2472,36 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
+@@ -2394,6 +2473,36 @@ void ExtensionPrefs::PopulateExtensionInfoPrefs(
    }
  }
  
@@ -829,10 +829,10 @@ index 7d3c6f5fd0e63f564739071752a4042bffce3f09..bcef28fba4606e98cbfbc23610eb8aa2
      const ExtensionsInfo& extensions_info) {
    TRACE_EVENT0("browser,startup",
 diff --git extensions/browser/extension_prefs.h extensions/browser/extension_prefs.h
-index ad82b74f482fb7578a8b0e42977b641cf23b87a6..b51145d81dc3c20e4afec08762dbeca9e7a16156 100644
+index 53d577a17ca70599ed22a0111de91b166176e0fa..8e9d3e91cff06859d5a454c31488517e620fe88a 100644
 --- extensions/browser/extension_prefs.h
 +++ extensions/browser/extension_prefs.h
-@@ -881,6 +881,10 @@ class ExtensionPrefs : public KeyedService {
+@@ -890,6 +890,10 @@ class ExtensionPrefs : public KeyedService {
    // pref store. Does nothing if extensions_disabled_ is true.
    void InitPrefStore();
  

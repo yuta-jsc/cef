@@ -544,6 +544,12 @@ def GetConfigArgs(args, is_debug, cpu):
   """
   add_args = {}
 
+  # RWSB: Always disable the Chromium field trial testing config. In non-official
+  # (developer) builds it is otherwise applied and auto-enables experimental
+  # features (e.g. the WebUI toolbar / InitialWebUI) that crash under the custom
+  # rwsb:// WebUI scheme (EXCEPTION_ACCESS_VIOLATION in InitialWebUIManager).
+  add_args['disable_fieldtrial_testing_config'] = True
+
   if GetArgValue(args, 'is_official_build'):
     # Disable Chromium field trials in official builds.
     add_args['disable_fieldtrial_testing_config'] = True
